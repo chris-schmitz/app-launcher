@@ -13,6 +13,8 @@ program
 
 let applist = config[program.location]
 
+if(!applist) throw new Error(chalk.red('Invalid location argument.'))
+
 applist.forEach((appPath) => {
     exec(`open "${appPath}"`, (err,stdout,stderr) => {
         if(err) throw new Error(chalk.red(err))
