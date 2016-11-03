@@ -19,7 +19,7 @@ module.exports = {
       },
       {
         test: /\.sass$/,
-        loaders:['css', 'style', 'sass'],
+        loaders:['style', 'css', 'sass'],
         exclude: /node_modules/
       },
       {

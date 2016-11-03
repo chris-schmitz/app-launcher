@@ -1,0 +1,20 @@
+@import "_variables.sass";
+@import "_mixins.sass";
+
+
+body,html
+    height: 100%
+    margin: 0
+
+
+body
+    background-color: $backgroundDark
+    color: $lightGray
+    font-size: $fontSize
+    font-family: 'helvetica'
+    display: flex
+    align-items: stretch
+    justify-content: center
+
+    button
+        +regular-button($highlight, $lightGray)
