@@ -34,9 +34,6 @@
         flex-direction: column;
         flex-grow: 1;
         padding: 20px;
-        // justify-content: space-between;
-        // align-items: stretch;
-
 
         > h1 {
             margin: 0 0 10px 0;
@@ -51,6 +48,7 @@
         .actions{
             display:flex;
             justify-content: center;
+            margin-top: 10px;
         }
     }
 </style>
