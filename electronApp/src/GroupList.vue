@@ -1,7 +1,7 @@
 <template>
     <div class="group-list-container">
         <div class="group" v-for="group in groups">
-            <h3 class="group-name">{{ group.name }}</h3>
+            <h4 class="group-name">{{ group.name }}</h4>
             <div class="app-list-container">
                 <h4 class="launches-title">Launches:</h4>
                 <ul class="app-list">
@@ -9,6 +9,8 @@
                 </ul>
             </div>
             <div class="actions-container">
+                <button class="launch-action">Launch</button>
+                <div class="spacer"></div>
                 <button v-on:click="editGroup(group.id)" class="edit-action">Edit</button>
                 <button class="delete-action">Delete</button>
             </div>
@@ -41,15 +43,13 @@
 <style lang="sass" scoped>
     @import "./style/_variables.sass";
     .group-list-container{
-        // display: flex;
-        // flex-direction: column;
 
 
         .group{
+            border: 1px solid $backgroundDark;
+            // border: 1px solid $background;
             background-color: $background;
-            // flex: 1;
             height: 150px;
-            border: 1px solid $background;
             margin-bottom: 5px;
             display: flex;
             justify-content: space-between;
@@ -69,7 +69,10 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                text-align: center;
                 width: 150px;
+                background-color: $backgroundDark;
+                // border: 1px solid $backgroundDark;
             }
 
             .app-list-container{
@@ -90,12 +93,26 @@
                 > * {
                     border: 1px solid $backgroundDark;
                     width: 100px;
-                    padding: 20px;
+                    font-size:10pt;
+                    // padding: 20px;
                     text-align: center;
+                    // display: flex;
+                    // justify-content: center;
+                    // align-items: center;
                 }
 
                 .edit-action{
+                    background-color: $highlightInfo;
+                }
+                .delete-action{
+                    background-color: $highlightDanger;
+                }
+                .launch-action{
                     background-color: $highlightSuccess;
+                }
+                .spacer{
+                    height: 10px;
+                    border: none;
                 }
             }
         }
