@@ -60,6 +60,7 @@
             justify-content: center;
             align-items: stretch;
             overflow:hidden;
+            background-color: $background;
         }
 
         .group-list-wrapper{
