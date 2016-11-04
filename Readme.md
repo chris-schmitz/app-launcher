@@ -33,4 +33,6 @@ electron .
 
 This will launch the electron app window. You'll be able to work in the electron window as you would normally in a browser window.
 
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Misc details
+- Color pallet used: [OnyxCF from http://www.color-hex.com/](http://www.color-hex.com/color-palette/25343)

@@ -2,8 +2,8 @@
     <div class="app-launcher">
         <h1>App Launcher</h1>
         <div class="content-container">
-            <div v-if="currentView === 'groupList'">This is a placeholder for the group list component.</div>
-            <div v-if="currentView === 'editGroup'">This is a placeholder for the edit group component.</div>
+            <group-list class="group-list-wrapper" v-if="currentView === 'groupList'"></group-list>
+            <group-details v-if="currentView === 'groupDetails'"></group-details>
         </div>
         <div class="actions">
             <button @click="createNewGroup">New Group</button>
@@ -12,15 +12,26 @@
 </template>
 
 <script>
+    import Store from './Store'
+    import GroupList from './GroupList.vue'
+    import GroupDetails from './GroupDetails.vue'
+
     module.exports = {
+        components:{GroupList,GroupDetails},
         data(){
             return {
-                currentView: 'groupList'
+                sharedState: Store.state
+                // currentView: 'groupDetails'
+            }
+        },
+        computed:{
+            currentView(){
+                return this.sharedState.groupContainerView
             }
         },
         methods:{
             createNewGroup(){
-                this.currentView = 'editGroup'
+                this.currentView = 'groupDetails'
             }
         }
     }
@@ -39,10 +50,24 @@
             margin: 0 0 10px 0;
         }
 
+
         .content-container{
             flex: 1;
             border: 1px solid $background;
             padding: 5px;
+            display: flex;
+            flex-direction:column;
+            justify-content: center;
+            align-items: stretch;
+            overflow:hidden;
+        }
+
+        .group-list-wrapper{
+            overflow-y: auto;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
         }
 
         .actions{
