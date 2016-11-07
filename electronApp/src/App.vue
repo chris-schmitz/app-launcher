@@ -6,7 +6,7 @@
             <group-details v-if="currentView === 'groupDetails'"></group-details>
         </div>
         <div class="actions">
-            <button @click="createNewGroup">New Group</button>
+            <button class="new-group" @click="createNewGroup">New Group</button>
         </div>
     </div>
 </template>
@@ -67,14 +67,14 @@
             overflow-y: auto;
         }
 
-        ::-webkit-scrollbar {
-            display: none;
-        }
-
         .actions{
             display:flex;
             justify-content: center;
             margin-top: 10px;
+
+            .new-group{
+                background-color: $highlightSuccess;
+            }
         }
     }
 </style>
