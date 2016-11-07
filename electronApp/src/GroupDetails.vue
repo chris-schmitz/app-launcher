@@ -14,7 +14,7 @@
                     <h4 class="heading">This group launches the apps:</h4>
                     <ul>
                         <li v-for="app in selectedGroup.launchApps">
-                            app: {{ app }}
+                            <span>{{ app }}</span><button>x</button>
                         </li>
                     </ul>
             </div>
@@ -95,17 +95,30 @@
                 display:flex;
                 flex-direction: column;
                 justify-content: flex-start;
-                padding:10px;
                 overflow-y: scroll;
-                
+
 
                 .heading{
                     margin: 0 0 5px 0;
                 }
 
                 ul {
-                    padding-left: 25px;
+                    padding-left: 0;
                     margin: 0;
+                    list-style: none;
+
+                    li {
+                        padding: 10px;
+                        border: 1px solid $backgroundDark;
+                        margin-bottom: 5px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        button {
+                            background-color: $highlightDanger;
+                        }
+                    }
                 }
             }
 
