@@ -103,8 +103,9 @@
                 }
 
                 ul {
-                    padding-left: 0;
                     margin: 0;
+                    margin-right: 10px;
+                    padding-left: 0;
                     list-style: none;
 
                     li {
@@ -132,8 +133,8 @@
                 span {margin-top:10px; margin-bottom:10px;}
 
                 button {
-                    margin-left: 15px;
-                    margin-right: 15px;
+                    margin-left: 10px;
+                    margin-right: 10px;
                 }
 
                 .drag-and-drop-target{
