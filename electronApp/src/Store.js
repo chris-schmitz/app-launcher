@@ -1,6 +1,7 @@
 module.exports = {
     state:{
-        groupContainerView: 'groupList',
+        groupContainerView: 'groupDetails',
+        // groupContainerView: 'groupList',
         selectedGroupId: 3,
         setContainerView(name){
             this.groupContainerView = name
@@ -8,8 +9,16 @@ module.exports = {
         selectGroup(id){
             this.selectedGroupId = id
         },
+        newGroup(name = null, launchApps = []){
+            return {id: this.getNextGroupId(), name, launchApps}
+        },
         selectedGroup(){
-            return this.groups.filter(group => Number(group.id) === Number(this.selectedGroupId))
+            return this.groups
+                .filter(group => Number(group.id) === Number(this.selectedGroupId))
+                .reduce(group => group ? group : this.newGroup())
+        },
+        getNextGroupId(){
+            return 10
         },
         groups: [
             {
@@ -21,7 +30,7 @@ module.exports = {
                 ]
             },
             {
-                id: 2,
+                id: 1,
                 name: 'Development - Personal',
                 launchApps:[
                     '/Applications/Atom.app',
