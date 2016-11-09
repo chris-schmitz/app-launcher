@@ -5,6 +5,7 @@
         v-on:dragleave="makeDropTargetActive(false)"
     >
         <h1>App Launcher</h1>
+        <notifications>{{ notificationMessage }}</notifications>
         <div class="content-container">
             <group-list class="group-list-wrapper" v-if="currentView === 'groupList'"></group-list>
             <group-details v-if="currentView === 'groupDetails'"></group-details>
@@ -23,13 +24,14 @@
     import Store from './Store'
     import GroupList from './GroupList.vue'
     import GroupDetails from './GroupDetails.vue'
+    import Notifications from './Notifications.vue'
 
     module.exports = {
-        components:{GroupList,GroupDetails},
+        components:{GroupList,GroupDetails,Notifications},
         data(){
             return {
                 sharedState: Store.state,
-                dragcounter: 0
+                dragcounter: 0,
             }
         },
         computed:{
@@ -43,6 +45,9 @@
                 set(active){
                     this.sharedState.dropTargetActive = active
                 }
+            },
+            notificationMessage(){
+                return this.sharedState.notificationMessage
             }
         },
         methods:{
