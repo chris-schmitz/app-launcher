@@ -25,7 +25,10 @@ module.exports = {
       {
         test: /\.css$/,
         loaders:['css', 'style'],
-        exclude: /node_modules/
+        exclude: [
+            /node_modules/,
+            /lib/
+        ]
       },
       {
         test: /\.js$/,
@@ -50,7 +53,13 @@ module.exports = {
     historyApiFallback: true,
     noInfo: true
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  plugins: [
+      new webpack.ExternalsPlugin('commonjs', [
+          'electron'
+      ])
+    //   ,new webpack.HotModuleReplacementPlugin()
+  ]
 }
 
 if (process.env.NODE_ENV === 'production') {
@@ -69,6 +78,6 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    })
+  })
   ])
 }

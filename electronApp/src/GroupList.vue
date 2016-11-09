@@ -9,7 +9,7 @@
                 </ul>
             </div>
             <div class="actions-container">
-                <button class="launch-action">Launch</button>
+                <button @click="launchGroup(group)" class="launch-action">Launch</button>
                 <button v-on:click="editGroup(group.id)" class="edit-action">Edit</button>
             </div>
         </div>
@@ -33,6 +33,9 @@
             editGroup(id){
                 this.sharedState.selectGroup(id)
                 this.sharedState.setContainerView('groupDetails')
+            },
+            launchGroup(group){
+                this.sharedState.launchGroup(group)
             }
         }
     }
@@ -45,6 +48,7 @@
     .group-list-container{
 
         .group{
+            background-color: orange;
             border: 1px solid $backgroundDark;
             // border: 1px solid $background;
             background-color: $background;
