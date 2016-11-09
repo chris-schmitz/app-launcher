@@ -27,6 +27,14 @@
         computed:{
             groups(){
                 return this.sharedState.groups
+            },
+            notificationMessage:{
+                get(){
+                    return this.sharedState.notificationMessage
+                },
+                set(message){
+                    this.sharedState.notificationMessage = message
+                }
             }
         },
         methods:{
@@ -35,7 +43,9 @@
                 this.sharedState.setContainerView('groupDetails')
             },
             launchGroup(group){
-                this.sharedState.launchGroup(group)
+                this.sharedState.launchGroup(group, (result) => {
+                    this.notificationMessage = result
+                })
             }
         }
     }

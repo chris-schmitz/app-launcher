@@ -6,6 +6,7 @@ module.exports = {
         groupContainerView: 'groupList',
         selectedGroupId: 1,
         dropTargetActive: false,
+        notificationMessage: null,
         groups: [
             {
                 id: 1,
@@ -58,18 +59,17 @@ module.exports = {
     This doesn't seem great. Consider refactoring
  */
 
-module.exports.state.launchGroup = function (group){
+module.exports.state.launchGroup = function (group, callback){
     ipc.send('launchGroup', group.name)
+
+    ipc.on('launchGroup-reply', (event, args) => {
+        if(args.success){
+            callback(`Group "${group.name}" has been launched.`)
+        } else {
+            callback(`Launch failed: ${args.message}`)
+        }
+    })
 }
-
-ipc.on('launchGroup-reply', (event, args) => {
-    if(args.success){
-        alert(`launch reply received with args: ${JSON.stringify(args.message)}`)
-    } else {
-        alert(`Launch failed: ${args.message}`)
-    }
-})
-
 
 module.exports.state.deleteGroup = function (group){
     alert(`Deleted ${this.selectedGroup().name}`)
