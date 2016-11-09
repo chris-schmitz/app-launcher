@@ -10,9 +10,7 @@
             </div>
             <div class="actions-container">
                 <button class="launch-action">Launch</button>
-                <div class="spacer"></div>
                 <button v-on:click="editGroup(group.id)" class="edit-action">Edit</button>
-                <button class="delete-action">Delete</button>
             </div>
         </div>
     </div>
@@ -42,8 +40,9 @@
 
 <style lang="sass" scoped>
     @import "./style/_variables.sass";
-    .group-list-container{
+    @import "./style/_mixins.sass";
 
+    .group-list-container{
 
         .group{
             border: 1px solid $backgroundDark;
@@ -77,6 +76,23 @@
 
             .app-list-container{
                 flex: 1;
+                overflow-y: scroll;
+                line-height: 1.5;
+
+                &::-webkit-scrollbar {
+                    display: block;
+                    width: 12px;
+                }
+
+                &::-webkit-scrollbar-track {
+                    -webkit-box-shadow: inset 0 0 6px $backgroundDark;
+                    border-radius: 10px;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    border-radius: 10px;
+                    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+                }
 
                 .app-list  {
                     font-size:12pt;
@@ -102,13 +118,13 @@
                 }
 
                 .edit-action{
-                    background-color: $highlightInfo;
+                    @include regular-button($highlightInfo, $white)
                 }
                 .delete-action{
-                    background-color: $highlightDanger;
+                    @include regular-button($highlightDanger, $white)
                 }
                 .launch-action{
-                    background-color: $highlightSuccess;
+                    @include regular-button($highlightSuccess, $white)
                 }
                 .spacer{
                     height: 10px;

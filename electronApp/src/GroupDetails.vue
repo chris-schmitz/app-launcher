@@ -1,12 +1,10 @@
+// holy cow break this up into nested components :O
+
+
 <template>
     <div class="group-details-container">
         <div>
-            <label for="id">ID</label>
-            {{ selectedGroup.id }}
-            <!-- <input type="text" name="id" v-model="selectedGroup.id"> -->
-        </div>
-        <div>
-            <label for="name">Name</label>
+            <label for="name">Group Name</label>
             <input type="text" name="name" v-model="selectedGroup.name">
         </div>
         <div class="app-details">
@@ -14,17 +12,32 @@
                     <h4 class="heading">This group launches the apps:</h4>
                     <ul>
                         <li v-for="app in selectedGroup.launchApps">
-                            <span>{{ app }}</span><button>x</button>
+                            <span>{{ app }}</span><button class="delete-app">x</button>
                         </li>
                     </ul>
             </div>
             <div class="add-app">
-                <div class="drag-and-drop-target">Drop app to add</div>
+                <div
+                    class="drag-and-drop-target"
+                    v-on:dragenter="setOverDropTarget(true)"
+                    v-on:dragleave="setOverDropTarget(false)"
+                    :class="{'dropTargetActive': dropTargetActive}"
+                >
+                    <span v-if="!overDropTarget">Drop app to add</span>
+                    <span v-if="overDropTarget">Drop it like it's hot! LOL</span>
+
+                </div>
                 <span>or</span>
                 <button type="button" @click="showSelectionWindow">Select to Add</button>
             </div>
         </div>
-        <!-- <button v-on:click="doneEditing">Back</button> -->
+        <div class="actions">
+            <button @click="deleteGroup" class="deleteButton">Delete</button>
+            <div>
+                <button @click="backToGroupList" class="backButton">Back</button>
+                <button @click="saveGroup" class="saveButton">Save</button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -34,7 +47,8 @@
     module.exports = {
         data(){
             return {
-                sharedState: Store.state
+                sharedState: Store.state,
+                overDropTarget: false
             }
         },
         computed:{
@@ -48,6 +62,14 @@
                 set(newValue){
                     this.sharedState.selectGroup(newValue)
                 }
+            },
+            dropTargetActive:{
+                get(){
+                    return this.sharedState.dropTargetActive
+                },
+                set(active){
+                    this.sharedState.dropTargetActive = active
+                }
             }
         },
         methods:{
@@ -56,6 +78,23 @@
             },
             showSelectionWindow(){
 
+            },
+            makeDropTargetActive(state){
+                this.dropTargetActive = state
+            },
+            setOverDropTarget(state){
+                this.overDropTarget = state
+            },
+            deleteGroup(){
+                this.sharedState.deleteGroup(this.selectedGroup)
+                this.backToGroupList()
+            },
+            saveGroup(){
+                this.sharedState.saveGroup(this.selectedGroup)
+                this.backToGroupList()
+            },
+            backToGroupList(){
+                this.sharedState.setContainerView('groupList')
             }
         }
     }
@@ -63,6 +102,9 @@
 
 <style lang="sass" scoped>
     @import "style/_variables.sass";
+    @import "style/_mixins.sass";
+
+
 
     .group-details-container{
         flex: 1;
@@ -76,7 +118,10 @@
 
             label {
                 display: inline-block;
-                width: 75px;
+                width: 130px;
+                display: flex;
+                align-items: center;
+                text-align: center;
             }
 
             input {
@@ -97,6 +142,9 @@
                 justify-content: flex-start;
                 overflow-y: scroll;
 
+                .delete-app{
+                    @include regular-button($highlightDanger, $white)
+                }
 
                 .heading{
                     margin: 0 0 5px 0;
@@ -115,10 +163,6 @@
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
-
-                        button {
-                            background-color: $highlightDanger;
-                        }
                     }
                 }
             }
@@ -138,7 +182,7 @@
                 }
 
                 .drag-and-drop-target{
-                    border: 3px dashed $highlightInfo;
+                    border: 2px dashed $highlightInfo;
                     height: 100px;
                     width: 100px;
                     background-color: $white;
@@ -147,9 +191,22 @@
                     justify-content: center;
                     align-items: center;
                     text-align: center;
+                    z-index:101;
                 }
             }
         }
 
+        .actions{
+            display: flex;
+            justify-content: space-between;
+            button{width:100px;}
+            .deleteButton{ @include regular-button($highlightDanger, $white); }
+            .saveButton{ @include regular-button($highlightSuccess, $white); }
+        }
+
+        .dropTargetActive {
+            color: $highlightInfo !important;
+            border-style: solid !important;
+        }
     }
 </style>

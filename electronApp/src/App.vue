@@ -1,13 +1,21 @@
 <template>
-    <div class="app-launcher">
+    <div
+        class="app-launcher"
+        v-on:dragenter="makeDropTargetActive(true)"
+        v-on:dragleave="makeDropTargetActive(false)"
+    >
         <h1>App Launcher</h1>
         <div class="content-container">
             <group-list class="group-list-wrapper" v-if="currentView === 'groupList'"></group-list>
             <group-details v-if="currentView === 'groupDetails'"></group-details>
         </div>
         <div class="actions">
-            <button class="new-group" @click="createNewGroup">New Group</button>
+            <button v-show="this.sharedState.groupContainerView === 'groupList'" class="new-group" @click="createNewGroup">New Group</button>
         </div>
+        <div
+            v-show="dropTargetActive"
+            class="lightbox-mask"
+        ></div>
     </div>
 </template>
 
@@ -20,18 +28,42 @@
         components:{GroupList,GroupDetails},
         data(){
             return {
-                sharedState: Store.state
-                // currentView: 'groupDetails'
+                sharedState: Store.state,
+                dragcounter: 0
             }
         },
         computed:{
             currentView(){
                 return this.sharedState.groupContainerView
+            },
+            dropTargetActive:{
+                get(){
+                    return this.sharedState.dropTargetActive
+                },
+                set(active){
+                    this.sharedState.dropTargetActive = active
+                }
             }
         },
         methods:{
             createNewGroup(){
                 this.currentView = 'groupDetails'
+            },
+            makeDropTargetActive(state){
+                // This seems really goofey and you should come back and clean
+                // it up, but for now it's working and it's time to go to wrk so
+                // LET'S GOOOO!
+                if(state){
+                    this.dragcounter++
+                } else {
+                    this.dragcounter--
+                }
+
+                if(this.dragcounter !== 0){
+                    this.dropTargetActive = true
+                } else {
+                    this.dropTargetActive = false
+                }
             }
         }
     }
@@ -39,6 +71,7 @@
 
 <style lang="sass" scoped>
     @import "./style/_variables.sass";
+    @import "./style/_mixins.sass";
 
     .app-launcher{
         display:flex;
@@ -73,8 +106,19 @@
             margin-top: 10px;
 
             .new-group{
-                background-color: $highlightSuccess;
+                @include regular-button($highlightSuccess, $white);
             }
         }
+
+        .lightbox-mask{
+            position: fixed;
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(black, .6);
+            z-index:100;
+        }
+
     }
 </style>

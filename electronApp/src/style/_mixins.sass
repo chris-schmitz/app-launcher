@@ -3,11 +3,13 @@
     background-color: $backgroundColor
     border: 1px solid darken($backgroundColor, 20%)
     color: $foregroundColor
-    font-size: $fontSize
+    font-size: 15pt !important
     border-radius: $borderRadius
     padding: 10px
     outline: none
     &:hover
         background-color: darken($backgroundColor, 20%)!important
         border: 1px solid $backgroundColor!important
-    // come back and fix the list buttons so they work with this
+    &:active
+        background-color: darken($backgroundColor, 20%)!important
+        border: 1px solid darken($backgroundColor, 20%)!important
