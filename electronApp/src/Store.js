@@ -2,7 +2,8 @@ module.exports = {
     state:{
         groupContainerView: 'groupDetails',
         // groupContainerView: 'groupList',
-        selectedGroupId: 3,
+        selectedGroupId: 1,
+        dropTargetActive: false,
         setContainerView(name){
             this.groupContainerView = name
         },
@@ -11,6 +12,12 @@ module.exports = {
         },
         newGroup(name = null, launchApps = []){
             return {id: this.getNextGroupId(), name, launchApps}
+        },
+        deleteGroup(group){
+            alert('deleted!')
+        },
+        saveGroup(group){
+            alert('saved!!')
         },
         selectedGroup(){
             return this.groups
@@ -26,7 +33,17 @@ module.exports = {
                 name: 'Development - Work',
                 launchApps:[
                     '/Applications/Slack.app',
-                    '/Applications/iTerm.app'
+                    '/Applications/iTerm.app',
+                    '/Applications/Slack.app',
+                    '/Applications/iTerm.app',
+                    '/Applications/Slack.app',
+                    '/Applications/iTerm.app',
+                    '/Applications/Slack.app',
+                    '/Applications/iTerm.app',
+                    '/Applications/Slack.app',
+                    '/Applications/iTerm.app',
+                    '/Applications/Slack.app',
+                    '/Applications/iTerm.app',
                 ]
             },
             {
