@@ -2,6 +2,8 @@ const {app, BrowserWindow} = require('electron')
 const appConfig = require('./appConfig')
 const ipc = require('electron').ipcMain
 const {getPromiseArrayForGroup} = require('../lib/launchGroup')
+const fs = require('fs')
+const path = require('path')
 
 let win
 
@@ -49,4 +51,15 @@ ipc.on('launchGroup', (event, group) => {
     Promise.all(getPromiseArrayForGroup(group))
     .then(result =>  sendLaunchReply(event, {success: true, message: result.join('\n')} ))
     .catch(result => sendLaunchReply(event, { success: false, message: result} ))
+})
+
+function getGroups(){
+    // note, we're extracting this function because eventually it will
+    // be replaced with a command that reads from indexdb
+    return require('../config').groups
+}
+
+ipc.on('loadGroups', event => {
+    debugger
+    event.sender.send('loadGroups-reply', {success: true, groups: getGroups()})
 })

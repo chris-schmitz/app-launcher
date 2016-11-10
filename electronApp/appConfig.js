@@ -1,8 +1,8 @@
 const config = {
     debugMode: true,
     window:{
-        height: 800,
-        width: 650
+        height: 500,
+        width: 800
     }
 }
 

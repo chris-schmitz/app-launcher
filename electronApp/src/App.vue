@@ -70,6 +70,9 @@
                     this.dropTargetActive = false
                 }
             }
+        },
+        mounted(){
+            this.sharedState.loadGroups()
         }
     }
 </script>
