@@ -7,50 +7,7 @@ module.exports = {
         selectedGroupId: 1,
         dropTargetActive: false,
         notificationMessage: null,
-        groups: [
-            {
-                id: 1,
-                name: 'work',
-                launchApps:[
-                    '/Applications/Slack.app',
-                    '/Applications/iTerm.app',
-                    '/Applications/Slack.app',
-                    '/Applications/iTerm.app',
-                    '/Applications/Slack.app',
-                    '/Applications/iTerm.app',
-                    '/Applications/Slack.app',
-                    '/Applications/iTerm.app',
-                    '/Applications/Slack.app',
-                    '/Applications/iTerm.app',
-                    '/Applications/Slack.app',
-                    '/Applications/iTerm.app',
-                ]
-            },
-            {
-                id: 2,
-                name: 'Development - Personal',
-                launchApps:[
-                    '/Applications/Atom.app',
-                    '/Applications/iTerm.app'
-                ]
-            },
-            {
-                id: 3,
-                name: 'Development - Personal Again',
-                launchApps:[
-                    '/Applications/Atom.app',
-                    '/Applications/iTerm.app'
-                ]
-            },
-            {
-                id: 4,
-                name: 'Design',
-                launchApps:[
-                    '/Applications/Phototshop.app',
-                    '/Applications/Illustrator.app'
-                ]
-            }
-        ]
+        groups: []
     }
 }
 
@@ -58,6 +15,17 @@ module.exports = {
 /*
     This doesn't seem great. Consider refactoring
  */
+
+module.exports.state.loadGroups = function (){
+    ipc.send('loadGroups')
+    ipc.on('loadGroups-reply', (event, args) => {
+        if(args.success){
+            this.groups = args.groups
+        } else {
+            this.notificationMessage = "Error loading groups"
+        }
+    })
+}
 
 module.exports.state.launchGroup = function (group, callback){
     ipc.send('launchGroup', group.name)
