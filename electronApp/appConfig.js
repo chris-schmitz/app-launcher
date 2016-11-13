@@ -1,9 +1,12 @@
 const config = {
-    debugMode: true,
+    debugMode: false,
     window:{
         height: 500,
-        width: 800
-    }
+        width: 1200
+    },
+    appName: 'App Launcher',
+    description: "An open source app group launcher built with love in Electron and Vue.js.",
+    version: '0.0.1',
 }
 
 module.exports = config

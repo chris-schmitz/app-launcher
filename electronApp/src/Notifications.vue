@@ -1,6 +1,6 @@
 <template>
-    <div v-if="notificationMessage" class="notifications-container">
-        <slot></slot>
+    <div v-if="notificationMessage" class="notifications-container" :class="notificationType">
+        {{ notificationMessage }}
         <button @click="close">x</button>
     </div>
 </template>
@@ -15,12 +15,15 @@
             }
         },
         computed:{
+            notificationType(){
+                return this.sharedState.notification.type
+            },
             notificationMessage:{
                 get(){
-                    return this.sharedState.notificationMessage
+                    return this.sharedState.notification.message
                 },
                 set(message){
-                    this.sharedState.notificationMessage = message
+                    this.sharedState.notification.message = message
                 }
             }
         },
@@ -48,5 +51,18 @@
         button {
             @include regular-button($highlightDanger, $white);
         }
+
+    }
+    .success {
+        background-color: $highlightSuccess;
+    }
+    .danger {
+        background-color: $highlightDanger;
+    }
+    .warning {
+        background-color: $highlightWarning;
+    }
+    .info {
+        background-color: $highlightInfo;
     }
 </style>

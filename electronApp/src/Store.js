@@ -1,15 +1,41 @@
 const ipc = require('electron').ipcRenderer
 
-module.exports = {
+let store  = {
     state:{
         // groupContainerView: 'groupDetails',
         groupContainerView: 'groupList',
         selectedGroupId: 1,
         dropTargetActive: false,
-        notificationMessage: null,
+        notification: {
+            type: 'info',
+            message: null
+        },
         groups: []
     }
 }
+
+module.exports = store
+
+ipc.on('groupLaunched', (event, launchResult) => {
+    if(launchResult.success){
+        store.state.notification.type = "success"
+    } else {
+        store.state.notification.type = "danger"
+
+    }
+    store.state.notification.message = `Group "${launchResult.groupName}" launched.`
+})
+
+ipc.on('ShowAboutPage', () => {
+    alert('show about fired in store')
+    store.state.notification.message = 'Show about page'
+})
+
+// ipc.on('tray-launchGroup', function(event, group) {
+//     this.state.launchGroup(group, (message) => {
+//         this.notificationMessage = message
+//     })
+// })
 
 
 /*

@@ -1,17 +1,23 @@
-const {app, BrowserWindow} = require('electron')
+const {app} = require('electron')
 const appConfig = require('./appConfig')
 const ipc = require('electron').ipcMain
-const {getPromiseArrayForGroup} = require('../lib/launchGroup')
+const groupLauncher = require('../lib/GroupLauncher')
+
 const fs = require('fs')
 const path = require('path')
+const config = require('../config')
+const trayIcon = require('./TrayMenu')
+const windowHelper = require('./electronHelpers/Window')
 
-let win
+let win, tray
 
-function createWindow(){
-    win = new BrowserWindow({
+function createMainAppWindow(){
+    win = windowHelper.newWindow({
         height: appConfig.window.height,
-        width: appConfig.window.width
+        width: appConfig.window.width,
+        titleBarStyle: 'hidden'
     })
+
 
     win.loadURL(`file://${__dirname}/client/index.html`)
 
@@ -24,7 +30,10 @@ function createWindow(){
     })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+    createMainAppWindow()
+    trayIcon(win)
+})
 
 app.on('window-all-closed', () => {
     if(process.platform !== 'darwin'){
@@ -34,13 +43,10 @@ app.on('window-all-closed', () => {
 
 
 app.on('activate', () => {
-    alert('activated!')
-    console.log('activated!')
     if(win === null){
-        createWindow()
+        createMainAppWindow()
     }
 })
-
 
 function sendLaunchReply(event, payload = {success: false, message: 'Main process error.'}){
     console.log(payload)
@@ -48,7 +54,7 @@ function sendLaunchReply(event, payload = {success: false, message: 'Main proces
 }
 
 ipc.on('launchGroup', (event, group) => {
-    Promise.all(getPromiseArrayForGroup(group))
+    Promise.all(groupLauncher.getPromiseArrayForGroup(group))
     .then(result =>  sendLaunchReply(event, {success: true, message: result.join('\n')} ))
     .catch(result => sendLaunchReply(event, { success: false, message: result} ))
 })
