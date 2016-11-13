@@ -5,7 +5,7 @@
         v-on:dragleave="makeDropTargetActive(false)"
     >
         <h1>App Launcher</h1>
-        <notifications>{{ notificationMessage }}</notifications>
+        <notifications></notifications>
         <div class="content-container">
             <group-list class="group-list-wrapper" v-if="currentView === 'groupList'"></group-list>
             <group-details v-if="currentView === 'groupDetails'"></group-details>
@@ -47,7 +47,7 @@
                 }
             },
             notificationMessage(){
-                return this.sharedState.notificationMessage
+                return this.sharedState.notification.message
             }
         },
         methods:{
