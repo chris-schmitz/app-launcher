@@ -32,8 +32,17 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel',
-        exclude: /node_modules/
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query:{
+            "presets": [
+                'stage-3',
+                'es2015'
+            ],
+            "plugins":[
+                'babel-plugin-transform-runtime'
+            ]
+        }
       },
       {
         test: /\.(png|jpg|gif|svg)$/,

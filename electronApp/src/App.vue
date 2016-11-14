@@ -4,6 +4,7 @@
         v-on:dragenter="makeDropTargetActive(true)"
         v-on:dragleave="makeDropTargetActive(false)"
     >
+        {{spreadTest}}
         <h1>App Launcher</h1>
         <notifications></notifications>
         <div class="content-container">
@@ -21,6 +22,8 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+
     import Store from './Store'
     import GroupList from './GroupList.vue'
     import GroupDetails from './GroupDetails.vue'
@@ -31,24 +34,19 @@
         data(){
             return {
                 sharedState: Store.state,
-                dragcounter: 0,
+                dragcounter: 0
             }
         },
-        computed:{
-            currentView(){
-                return this.sharedState.groupContainerView
-            },
-            dropTargetActive:{
-                get(){
-                    return this.sharedState.dropTargetActive
-                },
-                set(active){
-                    this.sharedState.dropTargetActive = active
-                }
-            },
-            notificationMessage(){
-                return this.sharedState.notification.message
-            }
+        computed: {
+          currentView(){
+              return this.sharedState.groupContainerView
+          },
+        //   ...mapState({
+        //       groupContainerView
+        //   })
+        fullName(...name){
+            return arguments
+        },
         },
         methods:{
             createNewGroup(){
