@@ -35,7 +35,7 @@
             <button @click="deleteGroup" class="deleteButton">Delete</button>
             <div>
                 <button @click="backToGroupList" class="backButton">Back</button>
-                <button @click="saveGroup" class="saveButton">Save</button>
+                <button @click="saveGroup" class="saveButton">{{ containerViewMode === 'new' ? "Save" : "Update" }}</button>
             </div>
         </div>
     </div>
@@ -52,6 +52,9 @@
             }
         },
         computed:{
+            containerViewMode(){
+                return this.sharedState.getContainerViewMode()
+            },
             selectedGroup(){
                 return Store.state.selectedGroup()
             },

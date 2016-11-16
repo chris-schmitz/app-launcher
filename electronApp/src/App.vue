@@ -27,7 +27,7 @@
     import Notifications from './Notifications.vue'
 
     module.exports = {
-        components:{GroupList,GroupDetails,Notifications},
+        components:{GroupList, GroupDetails,Notifications},
         data(){
             return {
                 sharedState: Store.state,
@@ -52,7 +52,8 @@
         },
         methods:{
             createNewGroup(){
-                this.currentView = 'groupDetails'
+                this.sharedState.setContainerView('groupDetails')
+                this.sharedState.setContainerViewMode('new')
             },
             makeDropTargetActive(state){
                 // This seems really goofey and you should come back and clean

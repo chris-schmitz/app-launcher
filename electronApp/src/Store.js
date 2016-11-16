@@ -1,9 +1,16 @@
 const ipc = require('electron').ipcRenderer
+const appConfig = require('../appConfig')
+const {Storage, Record} = require('../../lib/LocalStorage')
+
+
+// Refactor this whole crazy thing
 
 let store  = {
     state:{
         // groupContainerView: 'groupDetails',
         groupContainerView: 'groupList',
+        // refactor to put these two together
+        groupContainerViewMode: 'new',
         selectedGroupId: 1,
         dropTargetActive: false,
         notification: {
@@ -73,12 +80,25 @@ module.exports.state.setContainerView = function (name){
     this.groupContainerView = name
 }
 
+module.exports.state.getContainerViewMode = function (){
+    return this.groupContainerViewMode
+}
+
+module.exports.state.setContainerViewMode = function (mode){
+    this.groupContainerViewMode = mode
+}
+
 module.exports.state.selectGroup = function (id){
     this.selectedGroupId = id
 }
 
 module.exports.state.newGroup = function (name = null, launchApps = []){
-    return {id: this.getNextGroupId(), name, launchApps}
+    debugger
+    if(name === null) throw new Error('You must provide a name for the group')
+
+    let record = new Record(name, launchApps)
+    storage.save(record)
+    console.log(record)
 }
 
 module.exports.state.saveGroup = function (group){
