@@ -12,19 +12,19 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue',
+        loader: 'vue-loader',
         options: {
           // vue-loader options go here
         }
       },
       {
         test: /\.sass$/,
-        loaders:['style', 'css', 'sass'],
+        loaders:['style-loader', 'css-loader', 'sass-loader'],
         exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        loaders:['css', 'style'],
+        loaders:['css-loader', 'style-loader'],
         exclude: [
             /node_modules/,
             /lib/
@@ -32,7 +32,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude: /node_modules/
       },
       {
