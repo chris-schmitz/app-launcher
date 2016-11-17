@@ -1,5 +1,5 @@
 <template>
-    <div v-if="notificationMessage" class="notifications-container" :class="notificationType">
+    <div class="notifications-container" :class="notificationType">
         {{ notificationMessage }}
         <button @click="close">x</button>
     </div>

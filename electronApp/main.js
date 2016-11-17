@@ -32,12 +32,10 @@ function createMainAppWindow(){
 app.on('ready', () => {
     createMainAppWindow()
     trayIcon(win)
-    console.log('removing vue-devtools')
-    require('electron').BrowserWindow.removeDevToolsExtension('devtron')
 
-    // if(process.env.NODE_ENV !== 'production'){
-        // require('vue-devtools').install()
-    // }
+    if(process.env.NODE_ENV !== 'production'){
+        require('vue-devtools').install()
+    }
 })
 
 app.on('window-all-closed', () => {
