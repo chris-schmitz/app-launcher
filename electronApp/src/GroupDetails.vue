@@ -31,7 +31,7 @@
                 <span>or</span>
                 <label class="file-selector-input-label">
                     Select to Add
-                    <input type="file" name="files[]"  multiple/>
+                    <input v-on:change="getPathForSelectedFiles" type="file" name="files[]"  multiple/>
                 </label>
             </div>
         </div>
@@ -53,7 +53,6 @@
             return {
                 sharedState: Store.state,
                 overDropTarget: false,
-
             }
         },
         computed:{
@@ -100,6 +99,13 @@
             },
             backToGroupList(){
                 this.sharedState.setContainerView('groupList')
+            },
+            getPathForSelectedFiles(event){
+                Object
+                    .keys(event.target.files)
+                    .forEach(key => {
+                        this.addFileToGroupLaunchApps(event.target.files[key].path)
+                    })
             },
             getPathForDroppedFile(event){
                 let appPath = event.dataTransfer.files[0].path;
