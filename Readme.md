@@ -36,3 +36,12 @@ This will launch the electron app window. You'll be able to work in the electron
 
 ## Misc details
 - Color pallet used: [OnyxCF from http://www.color-hex.com/](http://www.color-hex.com/color-palette/25343)
+
+
+
+## To do list
+
+- "Unsaved changes, sure you don't want to save?" message on save/update group
+    - Build a window component to do the confirmation.
+- "Restore" ability when editing group props but before save
+- Custom sorting of app list

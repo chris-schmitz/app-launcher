@@ -38,9 +38,6 @@ ipc.on('ShowAboutPage', () => {
     store.state.notification.message = 'Show about page'
 })
 
-/*
-    Refactor this whole thing to pull from local storage
- */
 module.exports.state.loadGroups = function (){
     this.groups = Storage.getAll()
 }
@@ -81,9 +78,7 @@ module.exports.state.newGroup = function (name = null, launchApps = []){
 }
 
 module.exports.state.saveGroup = function (group){
-    // storage.save(record)
-    // console.log(record)
-
+    Storage.upsert(group)
 }
 
 module.exports.state.selectedGroup = function (){
