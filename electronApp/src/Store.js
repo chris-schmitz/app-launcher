@@ -1,10 +1,17 @@
 const ipc = require('electron').ipcRenderer
+const appConfig = require('../appConfig')
+const {Storage, Record} = require('../../lib/LocalStorage')
+
+
+// Refactor this whole crazy thing
 
 let store  = {
     state:{
         // groupContainerView: 'groupDetails',
         groupContainerView: 'groupList',
-        selectedGroupId: 1,
+        // refactor to put these two together
+        groupContainerViewMode: 'new',
+        selectedGroupId: null,
         dropTargetActive: false,
         notification: {
             type: 'info',
@@ -31,26 +38,11 @@ ipc.on('ShowAboutPage', () => {
     store.state.notification.message = 'Show about page'
 })
 
-// ipc.on('tray-launchGroup', function(event, group) {
-//     this.state.launchGroup(group, (message) => {
-//         this.notificationMessage = message
-//     })
-// })
-
-
 /*
-    This doesn't seem great. Consider refactoring
+    Refactor this whole thing to pull from local storage
  */
-
 module.exports.state.loadGroups = function (){
-    ipc.send('loadGroups')
-    ipc.on('loadGroups-reply', (event, args) => {
-        if(args.success){
-            this.groups = args.groups
-        } else {
-            this.notificationMessage = "Error loading groups"
-        }
-    })
+    this.groups = Storage.getAll()
 }
 
 module.exports.state.launchGroup = function (group, callback){
@@ -73,22 +65,30 @@ module.exports.state.setContainerView = function (name){
     this.groupContainerView = name
 }
 
+module.exports.state.getContainerViewMode = function (){
+    return this.groupContainerViewMode
+}
+
+
 module.exports.state.selectGroup = function (id){
     this.selectedGroupId = id
 }
 
 module.exports.state.newGroup = function (name = null, launchApps = []){
-    return {id: this.getNextGroupId(), name, launchApps}
+    if(name === null) throw new Error('You must provide a name for the group')
+
+    return new Record(name, launchApps)
 }
 
 module.exports.state.saveGroup = function (group){
-    alert('saved!!')
+    // storage.save(record)
+    // console.log(record)
+
 }
 
 module.exports.state.selectedGroup = function (){
-    return this.groups
-        .filter(group => Number(group.id) === Number(this.selectedGroupId))
-        .reduce(group => group ? group : this.newGroup())
+    let group = this.groups.filter(group => Number(group.id) === Number(this.selectedGroupId))
+    return group.length === 0 ? this.newGroup('New Group') : group[0]
 }
 
 module.exports.state.getNextGroupId = function (){
