@@ -24,11 +24,14 @@
                     :class="{'dropTargetActive': dropTargetActive}"
                 >
                     <span v-if="!overDropTarget">Drop app to add</span>
-                    <span v-if="overDropTarget">Drop it like it's hot! LOL</span>
+                    <span v-if="overDropTarget">Bombs away!</span>
 
                 </div>
                 <span>or</span>
-                <button type="button" @click="showSelectionWindow">Select to Add</button>
+                <label class="file-selector-input-label">
+                    Select to Add
+                    <input type="file" name="files[]"  multiple/>
+                </label>
             </div>
         </div>
         <div class="actions">
@@ -48,7 +51,8 @@
         data(){
             return {
                 sharedState: Store.state,
-                overDropTarget: false
+                overDropTarget: false,
+
             }
         },
         computed:{
@@ -75,9 +79,6 @@
         methods:{
             doneEditing(){
                 this.sharedState.setContainerView('groupList')
-            },
-            showSelectionWindow(){
-
             },
             makeDropTargetActive(state){
                 this.dropTargetActive = state
@@ -176,9 +177,19 @@
 
                 span {margin-top:10px; margin-bottom:10px;}
 
-                button {
+                .file-selector-input-label {
                     margin-left: 10px;
                     margin-right: 10px;
+                    @include regular-button($highlightInfo, $white);
+
+                    input{
+                        width: 0.1px;
+                    	height: 0.1px;
+                    	opacity: 0;
+                    	overflow: hidden;
+                    	position: absolute;
+                    	z-index: -1;
+                    }
                 }
 
                 .drag-and-drop-target{
