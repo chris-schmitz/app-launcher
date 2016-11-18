@@ -5,7 +5,11 @@
         v-on:dragleave="makeDropTargetActive(false)"
     >
         <h1>App Launcher</h1>
-        <notifications></notifications>
+        <!--
+        Note that we need to control the display state of the notification here in the parent context not because
+        it won't work if we encapsulate it in the notification component, but because if we do it blows up vue devtools
+        -->
+        <notifications v-if="notificationMessage"></notifications>
         <div class="content-container">
             <group-list class="group-list-wrapper" v-if="currentView === 'groupList'"></group-list>
             <group-details v-if="currentView === 'groupDetails'"></group-details>
@@ -27,7 +31,7 @@
     import Notifications from './Notifications.vue'
 
     module.exports = {
-        components:{GroupList,GroupDetails,Notifications},
+        components:{GroupList, GroupDetails,Notifications},
         data(){
             return {
                 sharedState: Store.state,
@@ -52,7 +56,8 @@
         },
         methods:{
             createNewGroup(){
-                this.currentView = 'groupDetails'
+                this.sharedState.selectGroup(null)
+                this.sharedState.setContainerView('groupDetails')
             },
             makeDropTargetActive(state){
                 // This seems really goofey and you should come back and clean
@@ -72,6 +77,10 @@
             }
         },
         mounted(){
+            document.ondragover = document.ondrop = (ev) => {
+              ev.preventDefault()
+            }
+
             this.sharedState.loadGroups()
         }
     }

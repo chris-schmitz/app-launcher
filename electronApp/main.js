@@ -2,7 +2,6 @@ const {app} = require('electron')
 const appConfig = require('./appConfig')
 const ipc = require('electron').ipcMain
 const groupLauncher = require('../lib/GroupLauncher')
-
 const fs = require('fs')
 const path = require('path')
 const config = require('../config')
@@ -33,6 +32,10 @@ function createMainAppWindow(){
 app.on('ready', () => {
     createMainAppWindow()
     trayIcon(win)
+
+    if(process.env.NODE_ENV !== 'production'){
+        require('vue-devtools').install()
+    }
 })
 
 app.on('window-all-closed', () => {

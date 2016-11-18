@@ -12,7 +12,7 @@
                     <h4 class="heading">This group launches the apps:</h4>
                     <ul>
                         <li v-for="app in selectedGroup.launchApps">
-                            <span>{{ app }}</span><button class="delete-app">x</button>
+                            <span>{{ app }}</span><button @click="removeApp(app)" class="delete-app">x</button>
                         </li>
                     </ul>
             </div>
@@ -21,6 +21,7 @@
                     class="drag-and-drop-target"
                     v-on:dragenter="setOverDropTarget(true)"
                     v-on:dragleave="setOverDropTarget(false)"
+                    v-on:drop="getPathForDroppedFile"
                     :class="{'dropTargetActive': dropTargetActive}"
                 >
                     <span v-if="!overDropTarget">Drop app to add</span>
@@ -38,7 +39,7 @@
             <button @click="deleteGroup" class="deleteButton">Delete</button>
             <div>
                 <button @click="backToGroupList" class="backButton">Back</button>
-                <button @click="saveGroup" class="saveButton">Save</button>
+                <button @click="saveGroup" class="saveButton">{{ containerViewMode === 'new' ? "Save" : "Update" }}</button>
             </div>
         </div>
     </div>
@@ -56,6 +57,9 @@
             }
         },
         computed:{
+            containerViewMode(){
+                return this.sharedState.getContainerViewMode()
+            },
             selectedGroup(){
                 return Store.state.selectedGroup()
             },
@@ -96,6 +100,21 @@
             },
             backToGroupList(){
                 this.sharedState.setContainerView('groupList')
+            },
+            getPathForDroppedFile(event){
+                let appPath = event.dataTransfer.files[0].path;
+                this.addFileToGroupLaunchApps(appPath)
+                this.setOverDropTarget(false)
+                this.dropTargetActive = false
+            },
+            addFileToGroupLaunchApps(path){
+                this.selectedGroup.launchApps.push(path)
+            },
+            removeApp(app){
+                let index = this.selectedGroup.launchApps.indexOf(app)
+                if(index !== -1){
+                    this.selectedGroup.launchApps.splice(index, 1)
+                }
             }
         }
     }
