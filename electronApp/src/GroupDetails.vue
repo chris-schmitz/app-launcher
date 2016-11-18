@@ -98,6 +98,8 @@
                 this.backToGroupList()
             },
             backToGroupList(){
+                
+                this.sharedState.loadGroups()
                 this.sharedState.setContainerView('groupList')
             },
             getPathForSelectedFiles(event){
