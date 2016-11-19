@@ -16,6 +16,14 @@ let store = {
         },
         groups: []
     },
+    showNotification(message, type){
+        this.state.notification.message = message
+        this.state.notification.type = type
+        setTimeout(() => {
+            this.state.notification.message = null
+            this.state.notification.type = 'info'
+        }, 3000)
+    },
     loadGroups: function (){
         this.state.groups = Storage.getAll()
     },

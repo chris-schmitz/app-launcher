@@ -15,6 +15,17 @@
                 <button @click="saveGroup" class="saveButton">{{ containerViewMode === 'new' ? "Save" : "Update" }}</button>
             </div>
         </div>
+        <modal v-if="confirmationMessage">
+            <span slot="message">
+                {{ confirmationMessage }}
+            </span>
+            <div slot="buttons">
+                <div class="button-container">
+                    <button @click="cancelGroupDeletion" class="cancel">No</button>
+                    <button @click="confirmGroupDeletion" class="confirm">Yes</button>
+                </div>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -22,12 +33,14 @@
     import store from './Store'
     import AppList from './AppList.vue'
     import AppAdder from './AppAdder.vue'
+    import Modal from './Modal.vue'
 
     module.exports = {
-        components:{AppList, AppAdder},
+        components:{AppList, AppAdder, Modal},
         data(){
             return {
-                sharedState: store.state
+                sharedState: store.state,
+                confirmationMessage: null
             }
         },
         computed:{
@@ -54,17 +67,25 @@
                 this.dropTargetActive = state
             },
             deleteGroup(){
-                store.deleteGroup(this.selectedGroup)
-                this.backToGroupList()
+                this.confirmationMessage = "Are you sure you want to delete this group?"
             },
             saveGroup(){
                 store.saveGroup(this.selectedGroup)
+                store.showNotification(`Changes to group ${this.selectedGroup.name} saved.`, 'info')
                 this.backToGroupList()
             },
             backToGroupList(){
-                // confirm
                 store.loadGroups()
                 store.setContainerView('groupList')
+            },
+            cancelGroupDeletion(){
+                this.confirmationMessage = null
+            },
+            confirmGroupDeletion(){
+                this.confirmationMessage = null
+                store.showNotification(`Group ${this.selectedGroup.name} deleted.`, 'info')
+                store.deleteGroup(this.selectedGroup)
+                this.backToGroupList()
             }
         }
     }
