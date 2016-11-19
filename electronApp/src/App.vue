@@ -56,7 +56,9 @@
         },
         methods:{
             createNewGroup(){
-                store.selectGroup(null)
+                let newGroup = store.newGroup('New Group')
+                this.sharedState.groups.push(newGroup)
+                store.selectGroup(newGroup.id)
                 store.setContainerView('groupDetails')
             },
             makeDropTargetActive(state){
