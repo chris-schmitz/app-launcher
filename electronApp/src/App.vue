@@ -25,7 +25,7 @@
 </template>
 
 <script>
-    import Store from './Store'
+    import store from './Store'
     import GroupList from './GroupList.vue'
     import GroupDetails from './GroupDetails.vue'
     import Notifications from './Notifications.vue'
@@ -34,7 +34,7 @@
         components:{GroupList, GroupDetails,Notifications},
         data(){
             return {
-                sharedState: Store.state,
+                sharedState: store.state,
                 dragcounter: 0,
             }
         },
@@ -56,8 +56,8 @@
         },
         methods:{
             createNewGroup(){
-                this.sharedState.selectGroup(null)
-                this.sharedState.setContainerView('groupDetails')
+                store.selectGroup(null)
+                store.setContainerView('groupDetails')
             },
             makeDropTargetActive(state){
                 // This seems really goofey and you should come back and clean
@@ -81,7 +81,7 @@
               ev.preventDefault()
             }
 
-            this.sharedState.loadGroups()
+            store.loadGroups()
         }
     }
 </script>

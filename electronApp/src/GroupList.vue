@@ -17,11 +17,11 @@
 </template>
 
 <script>
-    import Store from './Store'
+    import store from './Store'
     module.exports = {
         data(){
             return {
-                sharedState: Store.state
+                sharedState: store.state
             }
         },
         computed:{
@@ -39,11 +39,11 @@
         },
         methods:{
             editGroup(id){
-                this.sharedState.selectGroup(id)
-                this.sharedState.setContainerView('groupDetails')
+                store.selectGroup(id)
+                store.setContainerView('groupDetails')
             },
             launchGroup(group){
-                this.sharedState.launchGroup(group, (result) => {
+                store.launchGroup(group, (result) => {
                     this.notificationMessage = result
                 })
             }
