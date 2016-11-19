@@ -90,27 +90,31 @@
 
             .app-list-container{
                 flex: 1;
-                overflow-y: scroll;
+                display: flex;
+                flex-direction: column;
                 line-height: 1.5;
-
-                &::-webkit-scrollbar {
-                    display: block;
-                    width: 12px;
-                }
-
-                &::-webkit-scrollbar-track {
-                    -webkit-box-shadow: inset 0 0 6px $backgroundDark;
-                    border-radius: 10px;
-                }
-
-                &::-webkit-scrollbar-thumb {
-                    border-radius: 10px;
-                    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-                }
+                padding:0 0 0 5px;
 
                 .app-list  {
                     font-size:12pt;
                     margin: 1.5px;
+                    overflow-y: scroll;
+                    overflow-x: hidden;
+
+                    &::-webkit-scrollbar {
+                        display: block;
+                        width: 12px;
+                    }
+
+                    &::-webkit-scrollbar-track {
+                        -webkit-box-shadow: inset 0 0 6px $backgroundDark;
+                        border-radius: 10px;
+                    }
+
+                    &::-webkit-scrollbar-thumb {
+                        border-radius: 10px;
+                        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+                    }
                 }
             }
 
