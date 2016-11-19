@@ -31,7 +31,7 @@ let store = {
         })
     },
     deleteGroup: function (group){
-        alert(`Deleted ${this.selectedGroup().name}`)
+        Storage.delete(group)
     },
     setContainerView: function (name){
         this.state.groupContainerView = name
