@@ -98,7 +98,7 @@
                 this.backToGroupList()
             },
             backToGroupList(){
-                
+                // confirm
                 this.sharedState.loadGroups()
                 this.sharedState.setContainerView('groupList')
             },
@@ -108,6 +108,7 @@
                     .forEach(key => {
                         this.addFileToGroupLaunchApps(event.target.files[key].path)
                     })
+
             },
             getPathForDroppedFile(event){
                 let appPath = event.dataTransfer.files[0].path;
