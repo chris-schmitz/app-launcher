@@ -1,6 +1,3 @@
-// holy cow break this up into nested components :O
-
-
 <template>
     <div class="group-details-container">
         <div>
@@ -8,10 +5,7 @@
             <input type="text" name="name" v-model="selectedGroup.name">
         </div>
         <div class="app-details">
-            <div class="app-list">
-                    <h4 class="heading">This group launches the apps:</h4>
-                    <app-list></app-list>
-            </div>
+            <app-list class="app-list"></app-list>
             <app-adder class="add-app"></app-adder>
         </div>
         <div class="actions">
