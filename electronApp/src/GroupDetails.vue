@@ -46,28 +46,28 @@
 </template>
 
 <script>
-    import Store from './Store'
+    import store from './Store'
 
     module.exports = {
         data(){
             return {
-                sharedState: Store.state,
+                sharedState: store.state,
                 overDropTarget: false,
             }
         },
         computed:{
             containerViewMode(){
-                return this.sharedState.getContainerViewMode()
+                return store.getContainerViewMode()
             },
             selectedGroup(){
-                return Store.state.selectedGroup()
+                return store.selectedGroup()
             },
             selectedGroupId: {
                 get(){
                     return this.sharedState.selectedGroupId
                 },
                 set(newValue){
-                    this.sharedState.selectGroup(newValue)
+                    store.selectGroup(newValue)
                 }
             },
             dropTargetActive:{
@@ -81,7 +81,7 @@
         },
         methods:{
             doneEditing(){
-                this.sharedState.setContainerView('groupList')
+                store.setContainerView('groupList')
             },
             makeDropTargetActive(state){
                 this.dropTargetActive = state
@@ -90,17 +90,17 @@
                 this.overDropTarget = state
             },
             deleteGroup(){
-                this.sharedState.deleteGroup(this.selectedGroup)
+                store.deleteGroup(this.selectedGroup)
                 this.backToGroupList()
             },
             saveGroup(){
-                this.sharedState.saveGroup(this.selectedGroup)
+                store.saveGroup(this.selectedGroup)
                 this.backToGroupList()
             },
             backToGroupList(){
                 // confirm
-                this.sharedState.loadGroups()
-                this.sharedState.setContainerView('groupList')
+                store.loadGroups()
+                store.setContainerView('groupList')
             },
             getPathForSelectedFiles(event){
                 Object
