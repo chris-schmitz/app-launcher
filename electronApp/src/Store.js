@@ -52,7 +52,8 @@ let store = {
     },
     selectedGroup: function (){
         let group = this.state.groups.filter(group => Number(group.id) === Number(this.state.selectedGroupId))
-        return group.length === 0 ? this.newGroup('New Group') : group[0]
+        if(group.length === 0 ) throw new Error('Unable to select the group.')
+        return group[0]
     }
 }
 
