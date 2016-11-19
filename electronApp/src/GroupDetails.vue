@@ -10,11 +10,7 @@
         <div class="app-details">
             <div class="app-list">
                     <h4 class="heading">This group launches the apps:</h4>
-                    <ul>
-                        <li v-for="app in selectedGroup.launchApps">
-                            <span>{{ app }}</span><button @click="removeApp(app)" class="delete-app">x</button>
-                        </li>
-                    </ul>
+                    <app-list></app-list>
             </div>
             <div class="add-app">
                 <div
@@ -47,8 +43,10 @@
 
 <script>
     import store from './Store'
+    import AppList from './AppList.vue'
 
     module.exports = {
+        components:{AppList},
         data(){
             return {
                 sharedState: store.state,
@@ -118,12 +116,6 @@
             },
             addFileToGroupLaunchApps(path){
                 this.selectedGroup.launchApps.push(path)
-            },
-            removeApp(app){
-                let index = this.selectedGroup.launchApps.indexOf(app)
-                if(index !== -1){
-                    this.selectedGroup.launchApps.splice(index, 1)
-                }
             }
         }
     }
@@ -164,36 +156,8 @@
             // > {border: 1px solid $backgroundDark}
 
             .app-list{
-                border-right: 1px solid $backgroundDark;
                 flex: 4;
-                display:flex;
-                flex-direction: column;
-                justify-content: flex-start;
-                overflow-y: scroll;
 
-                .delete-app{
-                    @include regular-button($highlightDanger, $white)
-                }
-
-                .heading{
-                    margin: 0 0 5px 0;
-                }
-
-                ul {
-                    margin: 0;
-                    margin-right: 10px;
-                    padding-left: 0;
-                    list-style: none;
-
-                    li {
-                        padding: 10px;
-                        border: 1px solid $backgroundDark;
-                        margin-bottom: 5px;
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                    }
-                }
             }
 
             .add-app {
