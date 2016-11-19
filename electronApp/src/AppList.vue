@@ -1,5 +1,6 @@
 <template>
     <div class="app-list-container">
+        <h4 class="heading">This group launches the apps:</h4>
         <ul>
             <li v-for="app in selectedGroup.launchApps">
                 <span>{{ app }}</span><button @click="removeApp(app)" class="delete-app">x</button>
@@ -38,25 +39,24 @@
     @import "style/_mixins.sass";
 
     .app-list-container{
+        overflow: hidden;
         border-right: 1px solid $backgroundDark;
         display:flex;
         flex-direction: column;
         justify-content: flex-start;
-        overflow-y: scroll;
 
         .delete-app{
             @include regular-button($highlightDanger, $white)
         }
 
-        .heading{
-            margin: 0 0 5px 0;
-        }
+        .heading{}
 
         ul {
             margin: 0;
             margin-right: 10px;
             padding-left: 0;
             list-style: none;
+            overflow:scroll;
 
             li {
                 padding: 10px;
