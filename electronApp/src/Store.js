@@ -1,13 +1,12 @@
 const ipc = require('electron').ipcRenderer
 const appConfig = require('../appConfig')
-const {Storage, Record} = require('../../lib/LocalStorage')
+const {Storage, Record} = require('../../lib/StorageInterface')
 
 let store = {
     state:{
         // groupContainerView: 'groupDetails',
         groupContainerView: 'groupList',
         // refactor to put these two together
-        groupContainerViewMode: 'new',
         selectedGroupId: null,
         dropTargetActive: false,
         notification: {
@@ -24,10 +23,16 @@ let store = {
             this.state.notification.type = 'info'
         }, 3000)
     },
-    loadGroups: function (){
-        this.state.groups = Storage.getAll()
+    loadGroups(){
+        let me = this // I _shouldn't_ have to do this if I change this to an arrow function, but for some reason it doesn't retain context
+        Storage.getAll((result) => {
+            // this should become an app notification
+            if(!result.success) throw new Error(result.error)
+            me.state.groups = result.records
+        })
     },
-    launchGroup: function (group, callback){
+    launchGroup(group, callback){
+        console.log('launching group')
         ipc.send('launchGroup', group.name)
 
         ipc.on('launchGroup-reply', (event, args) => {
@@ -38,27 +43,40 @@ let store = {
             }
         })
     },
-    deleteGroup: function (group){
+    deleteGroup(group){
         Storage.delete(group)
     },
-    setContainerView: function (name){
+    setContainerView(name){
         this.state.groupContainerView = name
     },
     getContainerViewMode:function (){
         return this.state.groupContainerViewMode
     },
-    selectGroup: function (id){
+    selectGroup(id){
         this.state.selectedGroupId = id
     },
-    newGroup: function (name = null, launchApps = []){
+    newGroup(name = null, launchApps = []){
         if(name === null) throw new Error('You must provide a name for the group')
 
         return new Record(name, launchApps)
     },
-    saveGroup: function (group){
-        Storage.upsert(group)
+    saveGroup(group, callback){
+        ipc.send('storageRequest','upsert', group, (result) => {
+            alert(JSON.stringify(result))
+        })
+
+        ipc.on('storageRequest-reply', (event, eventResult) => {
+            debugger
+            if(eventResult.success){
+                this.showNotification('Changes Saved.', 'success')
+                this.setContainerView('groupList')
+            } else {
+                this.showNotification(`There was an error saving the group: ${eventResult.error}`, 'danger')
+            }
+
+        })
     },
-    selectedGroup: function (){
+    selectedGroup(){
         let group = this.state.groups.filter(group => Number(group.id) === Number(this.state.selectedGroupId))
         if(group.length === 0 ) throw new Error('Unable to select the group.')
         return group[0]

@@ -70,9 +70,14 @@
                 this.confirmationMessage = "Are you sure you want to delete this group?"
             },
             saveGroup(){
-                store.saveGroup(this.selectedGroup)
-                store.showNotification(`Changes to group ${this.selectedGroup.name} saved.`, 'info')
-                this.backToGroupList()
+                store.saveGroup(this.selectedGroup, (result) => {
+                    if(result.success){
+                        store.showNotification(`Changes to group ${this.selectedGroup.name} saved.`, 'info')
+                        this.backToGroupList()
+                    } else {
+                        store.showNotification(`Unable to save changes to group ${this.selectedGroup.name}.`, 'danger')
+                    }
+                })
             },
             backToGroupList(){
                 store.loadGroups()

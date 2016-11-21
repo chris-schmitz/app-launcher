@@ -8,6 +8,11 @@ const config = require('../config')
 const trayIcon = require('./TrayMenu')
 const windowHelper = require('./electronHelpers/Window')
 
+const settings = require('electron-settings')
+const {Storage} = require('../lib/StorageInterface')
+
+
+
 let win, tray
 
 function createMainAppWindow(){
@@ -33,9 +38,9 @@ app.on('ready', () => {
     createMainAppWindow()
     trayIcon(win)
 
-    if(process.env.NODE_ENV !== 'production'){
-        require('vue-devtools').install()
-    }
+    // if(process.env.NODE_ENV !== 'production'){
+    //     require('vue-devtool').install()
+    // }
 })
 
 app.on('window-all-closed', () => {
@@ -51,6 +56,13 @@ app.on('activate', () => {
     }
 })
 
+
+// Event bridges
+
+function EventResult(success = false, message = 'Error generating message', payload = []){
+    return {success, message, payload}
+}
+
 function sendLaunchReply(event, payload = {success: false, message: 'Main process error.'}){
     console.log(payload)
     event.sender.send('launchGroup-reply', payload)
@@ -58,8 +70,19 @@ function sendLaunchReply(event, payload = {success: false, message: 'Main proces
 
 ipc.on('launchGroup', (event, group) => {
     Promise.all(groupLauncher.getPromiseArrayForGroup(group))
-    .then(result =>  sendLaunchReply(event, {success: true, message: result.join('\n')} ))
-    .catch(result => sendLaunchReply(event, { success: false, message: result} ))
+        .then(result =>  sendLaunchReply(event, {success: true, message: result.join('\n')} ))
+        .catch(result => sendLaunchReply(event, { success: false, message: result} ))
+})
+
+function sendStorageReply(event, eventResult){
+    event.sender.send('storageRequest-reply', eventResult)
+}
+ipc.on('storageRequest', (event, requestType, payload, callback) => {
+    Storage.handleRequest(requestType, payload)
+        .then(result => {
+            sendStorageReply(event, result)
+        })
+        .catch(err => err)
 })
 
 function getGroups(){
@@ -68,7 +91,7 @@ function getGroups(){
     return require('../config').groups
 }
 
-ipc.on('loadGroups', event => {
-    debugger
-    event.sender.send('loadGroups-reply', {success: true, groups: getGroups()})
-})
+// ipc.on('loadGroups', event => {
+//     debugger
+//     event.sender.send('loadGroups-reply', {success: true, groups: getGroups()})
+// })

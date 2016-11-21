@@ -8,6 +8,7 @@ module.exports = {
     publicPath: '/',
     filename: 'build.js'
   },
+  target: 'electron',
   module: {
     rules: [
       {
@@ -58,7 +59,6 @@ module.exports = {
       new webpack.ExternalsPlugin('commonjs', [
           'electron'
       ])
-    //   ,new webpack.HotModuleReplacementPlugin()
   ]
 }
 

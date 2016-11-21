@@ -57,6 +57,7 @@
         methods:{
             createNewGroup(){
                 let newGroup = store.newGroup('New Group')
+                debugger
                 this.sharedState.groups.push(newGroup)
                 store.selectGroup(newGroup.id)
                 store.setContainerView('groupDetails')
