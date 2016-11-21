@@ -44,7 +44,7 @@ let store = {
         })
     },
     deleteGroup(group){
-        Storage.delete(group)
+        ipc.send('storageRequest', 'delete', group)
     },
     setContainerView(name){
         this.state.groupContainerView = name
@@ -61,23 +61,10 @@ let store = {
         return new Record(name, launchApps)
     },
     saveGroup(group, callback){
-        ipc.send('storageRequest','upsert', group, (result) => {
-            alert(JSON.stringify(result))
-        })
-
-        ipc.on('storageRequest-reply', (event, eventResult) => {
-            debugger
-            if(eventResult.success){
-                this.showNotification('Changes Saved.', 'success')
-                this.setContainerView('groupList')
-            } else {
-                this.showNotification(`There was an error saving the group: ${eventResult.error}`, 'danger')
-            }
-
-        })
+        ipc.send('storageRequest','upsert', group)
     },
     selectedGroup(){
-        let group = this.state.groups.filter(group => Number(group.id) === Number(this.state.selectedGroupId))
+        let group = this.state.groups.filter(group => group.id === this.state.selectedGroupId)
         if(group.length === 0 ) throw new Error('Unable to select the group.')
         return group[0]
     }
@@ -85,6 +72,21 @@ let store = {
 
 module.exports = store
 
+ipc.on('storageRequest-reply', (event, eventResult) => {
+    if(eventResult.success){
+        store.showNotification(eventResult.message, 'success')
+
+        // note that in this app, all of the places where we'd persist data happen from the
+        // group details component and should trigger the activation of the group list component,
+        // so hard coding it here instead of handling it dynamically like we would
+        store.setContainerView('groupList')
+        debugger
+        store.loadGroups()
+    } else {
+        store.showNotification(`There was an error saving the group: ${eventResult.error}`, 'danger')
+    }
+
+})
 // ===============
 
 ipc.on('groupLaunched', (event, launchResult) => {

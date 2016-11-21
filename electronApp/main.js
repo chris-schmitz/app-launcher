@@ -85,11 +85,6 @@ ipc.on('storageRequest', (event, requestType, payload, callback) => {
         .catch(err => err)
 })
 
-function getGroups(){
-    // note, we're extracting this function because eventually it will
-    // be replaced with a command that reads from indexdb
-    return require('../config').groups
-}
 
 // ipc.on('loadGroups', event => {
 //     debugger
