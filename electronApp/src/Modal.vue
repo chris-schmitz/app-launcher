@@ -29,6 +29,7 @@
     $buttonWidth: 100px;
 
     .modal-container{
+        z-index: 9999999;
         position: absolute;
         top:0;
         left:0;
