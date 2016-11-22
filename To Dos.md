@@ -1,6 +1,12 @@
 ##To Dos
-- [ ] A way to trigger a refresh of the menu after the group has been changed (both upsert and delete)
-- [ ] Refactor the GroupLauncher to work from application support
+- [ ] Pass through each file and pull out any unused dependencies
+- [ ] Reorganize the main process and any other file that seems messy
+- [ ] Pass through the app and aaaaaanotate!
+- [ ] Add the ability to let the user decide if they want to show the window on start
+- [ ] Prevent duplicate apps from being added to the launch group
+- [ ] check the GroupLauncher filter. It seems like we're only launching apps from the first group
+- [x] A way to trigger a refresh of the menu after the group has been changed (both upsert and delete)
+- [x] Refactor the GroupLauncher to work from application support
 - [ ] See if you can still allow the command line tools, it seem like the application support tool requires electron to work
     - Can we trigger the running electron instance?
     - Would it be fesable to parse the application support file directly?

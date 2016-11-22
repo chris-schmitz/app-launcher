@@ -11,6 +11,11 @@ const windowHelper = require('./electronHelpers/Window')
 const settings = require('electron-settings')
 const {Storage} = require('../lib/StorageInterface')
 
+if(process.env.NODE_ENV !== 'development'){
+    require('electron-reload')(__dirname, {
+      electron: path.join(__dirname, '..' ,'node_modules', '.bin', 'electron')
+    })
+}
 
 let win, tray
 
@@ -28,14 +33,22 @@ function createMainAppWindow(){
         win.webContents.openDevTools()
     }
 
-    win.on('closed', () => {
+    win.on('close', event => {
+        if(!app.isQuitting){
+            event.preventDefault()
+            win.hide()
+        }
+        return false
+    })
+
+    win.on('closed', (event) => {
         win = null
     })
 }
 
 app.on('ready', () => {
     createMainAppWindow()
-    tray = new TrayMenu
+    tray = new TrayMenu(win)
     tray.setTray(win)
 
     // if(process.env.NODE_ENV !== 'production'){
@@ -51,11 +64,8 @@ app.on('window-all-closed', () => {
 
 
 app.on('activate', () => {
-    if(win === null){
-        createMainAppWindow()
-    }
+    win.show()
 })
-
 
 // Event bridges
 
@@ -85,9 +95,3 @@ ipc.on('storageRequest', (event, requestType, payload, callback) => {
         })
         .catch(err => err)
 })
-
-
-// ipc.on('loadGroups', event => {
-//     debugger
-//     event.sender.send('loadGroups-reply', {success: true, groups: getGroups()})
-// })

@@ -1,12 +1,12 @@
 const {Menu, Tray} = require('electron')
 const path = require('path')
 const groupLauncher = require('../lib/GroupLauncher')
-const icp = require('electron').icpMain
 const windowHelper = require('./electronHelpers/Window')
 const {Storage} = require('../lib/StorageInterface')
 
 
-function TrayMenu(){
+function TrayMenu(win){
+    this.win = win
 }
 
 TrayMenu.prototype.newTray = function(){
@@ -47,8 +47,16 @@ TrayMenu.prototype.setTray = function(win){
 
         menuitems.unshift({type: 'separator'})
         menuitems.unshift({
+            label: 'Open Launcher',
+            click(){
+                win.show()
+            }
+        })
+
+        menuitems.push({type: 'separator'})
+        menuitems.push({
             label: 'About AppLauncher',
-            click: () => {
+            click(){
                 let win = windowHelper.newWindow({
                     height: 240,
                     width: 310,
