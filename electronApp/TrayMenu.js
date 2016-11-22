@@ -24,7 +24,9 @@ TrayMenu.prototype.setTray = function(win){
             return {
                 label: `Launch group: ${group.name}`,
                 click: (menuitem, browserWin, event) => {
+                    console.log('launching group', group.name)
                     groupLauncher.launch(group.name, (launchResult) => {
+                        console.log('got launch result')
                         // I'm not sure if I like the idea of passing along the payload
                         // regardless of success to the renderer function or not. Part
                         // of me wants to put a conditional check here for success,
@@ -35,7 +37,9 @@ TrayMenu.prototype.setTray = function(win){
                         // handled by the renderer process. For now I'm going to pass
                         // it all through and see how it feels. Let future me deal
                         // with a refactor if this decission sucked ;)
-                        win.webContents.send('groupLaunched', launchResult)
+                        if(!win.isDestroyed()){
+                            win.webContents.send('groupLaunched', launchResult)
+                        }
                     })
                 }
             }
