@@ -5,12 +5,11 @@ const groupLauncher = require('../lib/GroupLauncher')
 const fs = require('fs')
 const path = require('path')
 const config = require('../config')
-const trayIcon = require('./TrayMenu')
+const TrayMenu = require('./TrayMenu')
 const windowHelper = require('./electronHelpers/Window')
 
 const settings = require('electron-settings')
 const {Storage} = require('../lib/StorageInterface')
-
 
 
 let win, tray
@@ -36,7 +35,8 @@ function createMainAppWindow(){
 
 app.on('ready', () => {
     createMainAppWindow()
-    trayIcon(win)
+    tray = new TrayMenu
+    tray.setTray(win)
 
     // if(process.env.NODE_ENV !== 'production'){
     //     require('vue-devtool').install()
@@ -80,6 +80,7 @@ function sendStorageReply(event, eventResult){
 ipc.on('storageRequest', (event, requestType, payload, callback) => {
     Storage.handleRequest(requestType, payload)
         .then(result => {
+            tray.refreshTray(win)
             sendStorageReply(event, result)
         })
         .catch(err => err)

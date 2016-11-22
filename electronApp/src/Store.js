@@ -2,6 +2,7 @@ const ipc = require('electron').ipcRenderer
 const appConfig = require('../appConfig')
 const {Storage, Record} = require('../../lib/StorageInterface')
 
+
 let store = {
     state:{
         // groupContainerView: 'groupDetails',
@@ -32,7 +33,6 @@ let store = {
         })
     },
     launchGroup(group, callback){
-        console.log('launching group')
         ipc.send('launchGroup', group.name)
 
         ipc.on('launchGroup-reply', (event, args) => {
@@ -80,7 +80,6 @@ ipc.on('storageRequest-reply', (event, eventResult) => {
         // group details component and should trigger the activation of the group list component,
         // so hard coding it here instead of handling it dynamically like we would
         store.setContainerView('groupList')
-        debugger
         store.loadGroups()
     } else {
         store.showNotification(`There was an error saving the group: ${eventResult.error}`, 'danger')
