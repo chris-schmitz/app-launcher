@@ -17,6 +17,11 @@
         <div class="actions">
             <button v-show="this.sharedState.groupContainerView === 'groupList'" class="new-group" @click="createNewGroup">New Group</button>
         </div>
+        <div class="toolbar">
+            <label>
+                <input type="checkbox" v-model="hideAppOnLaunch"> Only show menubar on launch.
+            </label>
+        </div>
         <div
             v-show="dropTargetActive"
             class="lightbox-mask"
@@ -52,6 +57,14 @@
             },
             notificationMessage(){
                 return this.sharedState.notification.message
+            },
+            hideAppOnLaunch:{
+                get(){
+                    return this.sharedState.hideAppOnLaunch
+                },
+                set(state){
+                    this.sharedState.hideAppOnLaunch = state
+                }
             }
         },
         methods:{
@@ -137,6 +150,17 @@
             right: 0;
             background-color: rgba(black, .6);
             z-index:100;
+        }
+
+        .toolbar{
+            margin:5px;
+            // background-color: $background;
+            padding:5px;
+            display: flex;
+
+            label{
+                font-size:10pt;
+            }
         }
 
     }

@@ -47,6 +47,7 @@ function createMainAppWindow(){
 }
 
 app.on('ready', () => {
+    storageInitilization()
     createMainAppWindow()
     tray = new TrayMenu(win)
     tray.setTray(win)
@@ -87,11 +88,28 @@ ipc.on('launchGroup', (event, group) => {
 function sendStorageReply(event, eventResult){
     event.sender.send('storageRequest-reply', eventResult)
 }
-ipc.on('storageRequest', (event, requestType, payload, callback) => {
+ipc.on('storageRequest', (event, requestType, payload) => {
     Storage.handleRequest(requestType, payload)
         .then(result => {
-            tray.refreshTray(win)
+            // tray.refreshTray(win)
             sendStorageReply(event, result)
         })
         .catch(err => err)
 })
+
+function storageInitilization(){
+    let chalk = require('chalk')
+    console.log(chalk.green('initilizing storage'))
+    Storage.getAll([], (result) => {
+        console.log(chalk.red(JSON.stringify(result)))
+        if(result.records.length === 0){
+            console.log(chalk.green('upserting initial record'))
+            Storage.upsert(
+                {id: 123, name: 'test', launchApps:[]},
+                (result) => {
+                    console.log(chalk.blue(JSON.stringify(result)))
+                }
+            )
+        }
+    })
+}
