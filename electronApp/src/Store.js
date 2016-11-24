@@ -26,14 +26,6 @@ let store = {
     },
     loadGroups(){
         ipc.send('storageRequest', 'getAllGroups')
-
-
-        // let me = this // I _shouldn't_ have to do this if I change this to an arrow function, but for some reason it doesn't retain context
-        // Storage.getAll((result) => {
-        //     // this should become an app notification
-        //     if(!result.success) throw new Error(result.error)
-        //     me.state.groups = result.records
-        // })
     },
     launchGroup(group, callback){
         ipc.send('launchGroup', group.name)
@@ -41,7 +33,7 @@ let store = {
         ipc.on('launchGroup-reply', (event, args) => {
             if(args.success){
                 callback(`Group "${group.name}" has been launched.`)
-                this.state.groups = args.records
+                // this.state.groups = args.records
             } else {
                 callback(`Launch failed: ${args.message}`)
             }
@@ -99,7 +91,8 @@ ipc.on('storageRequest-reply', (event, eventResult) => {
 })
 // ===============
 
-ipc.on('groupLaunched', (event, launchResult) => {
+ipc.on('groupLaunchedFromTray', (event, launchResult) => {
+    console.log('group launched reply ')
     if(launchResult.success){
         store.state.notification.type = "success"
     } else {

@@ -84,9 +84,10 @@ function sendLaunchReply(event, payload = {success: false, message: 'Main proces
 }
 
 ipc.on('launchGroup', (event, group) => {
-    Promise.all(groupLauncher.getPromiseArrayForGroup(group))
-        .then(result =>  sendLaunchReply(event, {success: true, message: result.join('\n')} ))
-        .catch(result => sendLaunchReply(event, { success: false, message: result} ))
+    groupLauncher.launch(group, launchResult => sendLaunchReply(event, launchResult))
+    // Promise.all(groupLauncher.getPromiseArrayForGroup(group))
+    //     .then(result =>  sendLaunchReply(event, {success: true, message: result.join('\n')} ))
+    //     .catch(result => sendLaunchReply(event, { success: false, message: result} ))
 })
 
 function sendStorageReply(event, eventResult){

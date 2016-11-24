@@ -42,7 +42,7 @@ TrayMenu.prototype.setTray = function(){
                         // it all through and see how it feels. Let future me deal
                         // with a refactor if this decission sucked ;)
                         if(!this.win.isDestroyed()){
-                            this.win.webContents.send('groupLaunched', launchResult)
+                            this.win.webContents.send('groupLaunchedFromTray', launchResult)
                         }
                     })
                 }
