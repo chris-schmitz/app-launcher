@@ -1,5 +1,6 @@
 ##To Dos
-- [ ] Figure out proper way of quitting the app when the user quits instead of just closing the window
+- [ ] Refactor the storage interface so that the requested action names are constants that can be referenced in various placed. I.e. instead of having `getAllGroups` hard coded as strings in the main.js, Store.js, GroupLauncher.js, etc, files, export a keymap of constants that they can use instead and then the strings that are actually used are stored in one spot. 
+- [x] Figure out proper way of quitting the app when the user quits instead of just closing the window
 - [ ] Add the ability to let the user decide if they want to show the window on start
 - [ ] Prevent duplicate apps from being added to the launch group
 - [ ] Pass through each file and pull out any unused dependencies

@@ -41,6 +41,8 @@
             return {
                 sharedState: store.state,
                 dragcounter: 0,
+                hideAppOnLaunch: false
+
             }
         },
         computed:{
@@ -57,14 +59,6 @@
             },
             notificationMessage(){
                 return this.sharedState.notification.message
-            },
-            hideAppOnLaunch:{
-                get(){
-                    return this.sharedState.hideAppOnLaunch
-                },
-                set(state){
-                    this.sharedState.hideAppOnLaunch = state
-                }
             }
         },
         methods:{
@@ -89,6 +83,11 @@
                 } else {
                     this.dropTargetActive = false
                 }
+            }
+        },
+        watch:{
+            hideAppOnLaunch(hide){
+                store.ToggleHideAppOnLaunch(hide)
             }
         },
         mounted(){

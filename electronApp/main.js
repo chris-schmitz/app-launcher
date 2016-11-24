@@ -7,6 +7,7 @@ const path = require('path')
 const config = require('../config')
 const TrayMenu = require('./TrayMenu')
 const windowHelper = require('./electronHelpers/Window')
+const chalk = require('chalk')
 
 const settings = require('electron-settings')
 const {Storage} = require('../lib/StorageInterface')
@@ -85,17 +86,16 @@ function sendLaunchReply(event, payload = {success: false, message: 'Main proces
 
 ipc.on('launchGroup', (event, group) => {
     groupLauncher.launch(group, launchResult => sendLaunchReply(event, launchResult))
-    // Promise.all(groupLauncher.getPromiseArrayForGroup(group))
-    //     .then(result =>  sendLaunchReply(event, {success: true, message: result.join('\n')} ))
-    //     .catch(result => sendLaunchReply(event, { success: false, message: result} ))
 })
 
 function sendStorageReply(event, eventResult){
     event.sender.send('storageRequest-reply', eventResult)
 }
 ipc.on('storageRequest', (event, requestType, payload) => {
+    console.log(chalk.blue(`Storage request recieved: ${requestType}`))
     Storage.handleRequest(requestType, payload)
         .then(result => {
+            console.log(chalk.blue(`request handled ${JSON.stringify(result)}`))
             if(result.requestedAction !== 'getAllGroups'){
                 tray.refreshTray(win)
             }
@@ -108,7 +108,9 @@ function storageInitilization(){
     let chalk = require('chalk')
     console.log(chalk.green('initilizing storage'))
     Storage.getAllGroups([], (result) => {
+
         console.log(chalk.red(JSON.stringify(result)))
+        
         if(result.records.length === 0){
             console.log(chalk.green('upserting initial record'))
             Storage.upsert(

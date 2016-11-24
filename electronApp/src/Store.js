@@ -5,9 +5,7 @@ const {Storage, Record} = require('../../lib/StorageInterface')
 
 let store = {
     state:{
-        // groupContainerView: 'groupDetails',
         groupContainerView: 'groupList',
-        // refactor to put these two together
         selectedGroupId: null,
         dropTargetActive: false,
         notification: {
@@ -33,7 +31,6 @@ let store = {
         ipc.on('launchGroup-reply', (event, args) => {
             if(args.success){
                 callback(`Group "${group.name}" has been launched.`)
-                // this.state.groups = args.records
             } else {
                 callback(`Launch failed: ${args.message}`)
             }
@@ -63,12 +60,16 @@ let store = {
         let group = this.state.groups.filter(group => group.id === this.state.selectedGroupId)
         if(group.length === 0 ) throw new Error('Unable to select the group.')
         return group[0]
+    },
+    ToggleHideAppOnLaunch(hide){
+        ipc.send('storageRequest', 'toggleHideAppOnLaunch', hide)
     }
 }
 
 module.exports = store
 
 ipc.on('storageRequest-reply', (event, eventResult) => {
+    debugger
     console.log('storage request reply received!')
     if(eventResult.success){
         store.showNotification(eventResult.message, 'success')
@@ -77,11 +78,13 @@ ipc.on('storageRequest-reply', (event, eventResult) => {
         // group details component and should trigger the activation of the group list component,
         // so hard coding it here instead of handling it dynamically like we would
         store.setContainerView('groupList')
-        console.log('in storage request reply')
-        console.log(JSON.stringify(eventResult))
-        if(eventResult.requestedAction !== 'getAllGroups'){
+
+        // oh man yeah this is uuuugly but you know what?!?! I'm leaving it in
+        // because if I work on this anymore right now I'm going to go fucking
+        // batty! Have fun future me!!!!!!!!!!!!!! :'(
+        if(eventResult.requestedAction !== 'getAllGroups' && eventResult.requestedAction !== 'toggleHideAppOnLaunch'){
             store.loadGroups()
-        } else {
+        } else if(eventResult.requestedAction !== 'toggleHideAppOnLaunch'){
             store.state.groups = eventResult.records
         }
     } else {
