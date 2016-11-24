@@ -69,7 +69,6 @@ let store = {
 module.exports = store
 
 ipc.on('storageRequest-reply', (event, eventResult) => {
-    debugger
     console.log('storage request reply received!')
     if(eventResult.success){
         store.showNotification(eventResult.message, 'success')

@@ -52,9 +52,19 @@ function createTrayMenu(){
     tray.setTray()
 }
 
+
 app.on('ready', () => {
-    storageInitilization()
+    // storageInitilization()
+
     createMainAppWindow()
+
+    Storage.getHideAppOnLaunchState([], queryResult => {
+        console.log(`query result: ${queryResult.records[0]}`)
+        let hide = queryResult.records[0]
+        if(hide){
+            win.hide()
+        }
+    })
     createTrayMenu()
 
     // if(process.env.NODE_ENV !== 'production'){
@@ -80,7 +90,6 @@ function EventResult(success = false, message = 'Error generating message', payl
 }
 
 function sendLaunchReply(event, payload = {success: false, message: 'Main process error.'}){
-    console.log(payload)
     event.sender.send('launchGroup-reply', payload)
 }
 
@@ -92,10 +101,8 @@ function sendStorageReply(event, eventResult){
     event.sender.send('storageRequest-reply', eventResult)
 }
 ipc.on('storageRequest', (event, requestType, payload) => {
-    console.log(chalk.blue(`Storage request recieved: ${requestType}`))
     Storage.handleRequest(requestType, payload)
         .then(result => {
-            console.log(chalk.blue(`request handled ${JSON.stringify(result)}`))
             if(result.requestedAction !== 'getAllGroups'){
                 tray.refreshTray(win)
             }
@@ -104,21 +111,21 @@ ipc.on('storageRequest', (event, requestType, payload) => {
         .catch(err => err)
 })
 
-function storageInitilization(){
-    let chalk = require('chalk')
-    console.log(chalk.green('initilizing storage'))
-    Storage.getAllGroups([], (result) => {
-
-        console.log(chalk.red(JSON.stringify(result)))
-        
-        if(result.records.length === 0){
-            console.log(chalk.green('upserting initial record'))
-            Storage.upsert(
-                {id: 123, name: 'test', launchApps:[]},
-                (result) => {
-                    console.log(chalk.blue(JSON.stringify(result)))
-                }
-            )
-        }
-    })
-}
+// function storageInitilization(){
+//     let chalk = require('chalk')
+//     console.log(chalk.green('initilizing storage'))
+//     Storage.getAllGroups([], (result) => {
+//
+//         console.log(chalk.red(JSON.stringify(result)))
+//
+//         if(result.records.length === 0){
+//             console.log(chalk.green('upserting initial record'))
+//             Storage.upsert(
+//                 {id: 123, name: 'test', launchApps:[]},
+//                 (result) => {
+//                     console.log(chalk.blue(JSON.stringify(result)))
+//                 }
+//             )
+//         }
+//     })
+// }
