@@ -46,11 +46,15 @@ function createMainAppWindow(){
     })
 }
 
+function createTrayMenu(){
+    tray = new TrayMenu(win)
+    tray.setTray()
+}
+
 app.on('ready', () => {
     storageInitilization()
     createMainAppWindow()
-    tray = new TrayMenu(win)
-    tray.setTray(win)
+    createTrayMenu()
 
     // if(process.env.NODE_ENV !== 'production'){
     //     require('vue-devtool').install()

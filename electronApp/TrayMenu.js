@@ -3,8 +3,11 @@ const path = require('path')
 const groupLauncher = require('../lib/GroupLauncher')
 const windowHelper = require('./electronHelpers/Window')
 const {Storage} = require('../lib/StorageInterface')
+const {app} = require('electron')
 
 
+
+// I can't decide if it's a good idea to inject the app as
 function TrayMenu(win){
     this.win = win
 }
@@ -13,7 +16,7 @@ TrayMenu.prototype.newTray = function(){
     this.tray = new Tray(path.resolve(__dirname, './assets/rocketTemplate.png'))
 }
 
-TrayMenu.prototype.setTray = function(win){
+TrayMenu.prototype.setTray = function(){
     Storage.getAll([], result => {
         let groups = result.records
 
@@ -24,9 +27,7 @@ TrayMenu.prototype.setTray = function(win){
             return {
                 label: `Launch group: ${group.name}`,
                 click: (menuitem, browserWin, event) => {
-                    console.log('launching group', group.name)
                     groupLauncher.launch(group.name, (launchResult) => {
-                        console.log('got launch result')
                         // I'm not sure if I like the idea of passing along the payload
                         // regardless of success to the renderer function or not. Part
                         // of me wants to put a conditional check here for success,
@@ -37,8 +38,8 @@ TrayMenu.prototype.setTray = function(win){
                         // handled by the renderer process. For now I'm going to pass
                         // it all through and see how it feels. Let future me deal
                         // with a refactor if this decission sucked ;)
-                        if(!win.isDestroyed()){
-                            win.webContents.send('groupLaunched', launchResult)
+                        if(!this.win.isDestroyed()){
+                            this.win.webContents.send('groupLaunched', launchResult)
                         }
                     })
                 }
@@ -48,8 +49,8 @@ TrayMenu.prototype.setTray = function(win){
         menuitems.unshift({type: 'separator'})
         menuitems.unshift({
             label: 'Open Launcher',
-            click(){
-                win.show()
+            click:() => {
+                this.win.show()
             }
         })
 
@@ -71,8 +72,14 @@ TrayMenu.prototype.setTray = function(win){
                 })
             }
         })
+
         menuitems.push({type: 'separator'})
-        menuitems.push({label: 'Quit AppLauncher', role: 'quit'})
+        menuitems.push({
+            label: 'Quit AppLauncher',
+            click:() => {
+                app.exit(0)
+            }
+        })
 
         const contextMenu = Menu.buildFromTemplate(menuitems)
         this.tray.setContextMenu(contextMenu)
