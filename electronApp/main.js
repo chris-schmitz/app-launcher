@@ -95,7 +95,9 @@ function sendStorageReply(event, eventResult){
 ipc.on('storageRequest', (event, requestType, payload) => {
     Storage.handleRequest(requestType, payload)
         .then(result => {
-            // tray.refreshTray(win)
+            if(result.requestedAction !== 'getAllGroups'){
+                tray.refreshTray(win)
+            }
             sendStorageReply(event, result)
         })
         .catch(err => err)

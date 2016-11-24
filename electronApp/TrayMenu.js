@@ -2,6 +2,7 @@ const {Menu, Tray} = require('electron')
 const path = require('path')
 const groupLauncher = require('../lib/GroupLauncher')
 const windowHelper = require('./electronHelpers/Window')
+const chalk = require('chalk')
 const {Storage} = require('../lib/StorageInterface')
 const {app} = require('electron')
 
@@ -17,6 +18,8 @@ TrayMenu.prototype.newTray = function(){
 }
 
 TrayMenu.prototype.setTray = function(){
+    console.log(chalk.blue('Loading groups from tray menu'))
+
     Storage.getAllGroups([], result => {
         let groups = result.records
 
