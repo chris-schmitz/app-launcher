@@ -104,7 +104,7 @@ ipc.on('storageRequest', (event, requestType, payload) => {
 function storageInitilization(){
     let chalk = require('chalk')
     console.log(chalk.green('initilizing storage'))
-    Storage.getAll([], (result) => {
+    Storage.getAllGroups([], (result) => {
         console.log(chalk.red(JSON.stringify(result)))
         if(result.records.length === 0){
             console.log(chalk.green('upserting initial record'))

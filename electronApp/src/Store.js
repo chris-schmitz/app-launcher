@@ -25,7 +25,7 @@ let store = {
         }, 3000)
     },
     loadGroups(){
-        ipc.send('storageRequest', 'getAll')
+        ipc.send('storageRequest', 'getAllGroups')
 
 
         // let me = this // I _shouldn't_ have to do this if I change this to an arrow function, but for some reason it doesn't retain context
@@ -48,7 +48,7 @@ let store = {
         })
     },
     deleteGroup(group){
-        ipc.send('storageRequest', 'delete', group)
+        ipc.send('storageRequest', 'deleteGroup', group)
     },
     setContainerView(name){
         this.state.groupContainerView = name
@@ -65,7 +65,7 @@ let store = {
         return new Record(name, launchApps)
     },
     saveGroup(group, callback){
-        ipc.send('storageRequest','upsert', group)
+        ipc.send('storageRequest','upsertGroup', group)
     },
     selectedGroup(){
         let group = this.state.groups.filter(group => group.id === this.state.selectedGroupId)
@@ -87,7 +87,7 @@ ipc.on('storageRequest-reply', (event, eventResult) => {
         store.setContainerView('groupList')
         console.log('in storage request reply')
         console.log(JSON.stringify(eventResult))
-        if(eventResult.requestedAction !== 'getAll'){
+        if(eventResult.requestedAction !== 'getAllGroups'){
             store.loadGroups()
         } else {
             store.state.groups = eventResult.records

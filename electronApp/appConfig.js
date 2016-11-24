@@ -1,5 +1,5 @@
 const config = {
-    debugMode: true,
+    debugMode: false,
     window:{
         height: 500,
         width: 1200

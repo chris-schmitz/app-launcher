@@ -17,7 +17,7 @@ TrayMenu.prototype.newTray = function(){
 }
 
 TrayMenu.prototype.setTray = function(){
-    Storage.getAll([], result => {
+    Storage.getAllGroups([], result => {
         let groups = result.records
 
         this.newTray()
