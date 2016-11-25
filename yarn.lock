@@ -916,7 +916,11 @@ cmd-shim@~2.0.2:
     graceful-fs "^4.1.2"
     mkdirp "~0.5.0"
 
+<<<<<<< HEAD
 co, co@^4.6.0:
+=======
+co@^4.6.0:
+>>>>>>> 34527701147562d7e3598e0f8cbb545fe1a3e6bd
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
 
@@ -1409,6 +1413,7 @@ electron-rebuild:
     rimraf "^2.5.0"
     yargs "^3.31.0"
 
+<<<<<<< HEAD
 electron-settings:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/electron-settings/-/electron-settings-2.2.2.tgz#5e56f17f6d908987028e6d6ed21f86d98d20a1ff"
@@ -1421,6 +1426,8 @@ electron-settings:
     fs-extra "^0.30.0"
     key-path-helpers "^0.4.0"
 
+=======
+>>>>>>> 34527701147562d7e3598e0f8cbb545fe1a3e6bd
 electron@^1.4.4:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/electron/-/electron-1.4.4.tgz#86000bce15e06cadc3566cb7c86122590dee54a5"

@@ -2,7 +2,6 @@ const ipc = require('electron').ipcRenderer
 const appConfig = require('../appConfig')
 const {Storage, Record} = require('../../lib/StorageInterface')
 
-
 let store = {
     state:{
         groupContainerView: 'groupList',
