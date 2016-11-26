@@ -55,24 +55,33 @@ function createTrayMenu(){
 
 
 app.on('ready', () => {
-    // storageInitilization()
 
-    createMainAppWindow()
-
-    Storage.handleRequest(StorageActions.GETHIDEAPPONLAUNCHSTATE, [])
+    Storage.handleRequest(StorageActions.INITIALIZESTORAGE)
         .then(result => {
-            let {hide} = result.records[0]
-            if(hide){
-                win.hide()
-            }
+            console.log(`rezultz :P ${JSON.stringify(result)}`)
+            createMainAppWindow()
+
+            Storage.handleRequest(StorageActions.GETHIDEAPPONLAUNCHSTATE, [])
+                .then(result => {
+                    let {hide} = result.records[0]
+                    if(hide){
+                        win.hide()
+                    }
+                })
+                .catch(result => console.error('init', JSON.stringify(result.error)))
+
+            createTrayMenu()
+
+            // if(process.env.NODE_ENV !== 'production'){
+            //     require('vue-devtool').install()
+            // }
+
         })
-        .catch(error => console.error(error))
-
-    createTrayMenu()
-
-    // if(process.env.NODE_ENV !== 'production'){
-    //     require('vue-devtool').install()
-    // }
+        .catch(error => {
+            console.error('init', JSON.stringify(error))
+            createMainAppWindow()
+            // display an error notification
+        })
 })
 
 app.on('window-all-closed', () => {
@@ -111,24 +120,7 @@ ipc.on('storageRequest', (event, requestType, payload) => {
             }
             sendStorageReply(event, result)
         })
-        .catch(err => err)
+        .catch(err => {
+            console.error(new Error(chalk.red(err)))
+        })
 })
-
-// function storageInitilization(){
-//     let chalk = require('chalk')
-//     console.log(chalk.green('initilizing storage'))
-//     Storage.getAllGroups([], (result) => {
-//
-//         console.log(chalk.red(JSON.stringify(result)))
-//
-//         if(result.records.length === 0){
-//             console.log(chalk.green('upserting initial record'))
-//             Storage.upsert(
-//                 {id: 123, name: 'test', launchApps:[]},
-//                 (result) => {
-//                     console.log(chalk.blue(JSON.stringify(result)))
-//                 }
-//             )
-//         }
-//     })
-// }

@@ -74,7 +74,9 @@ module.exports = store
 ipc.on('storageRequest-reply', (event, eventResult) => {
     console.log('storage request reply received!')
     if(eventResult.success){
-        store.showNotification(eventResult.message, 'success')
+        if(event.requestedAction !== StorageActions.GETALLGROUPS){
+            store.showNotification(eventResult.message, 'success')
+        }
 
         // note that in this app, all of the places where we'd persist data happen from the
         // group details component and should trigger the activation of the group list component,

@@ -43,7 +43,7 @@ TrayMenu.prototype.setTray = function(){
             this.tray.setContextMenu(contextMenu)
 
         })
-        .catch(error => console.error(chalk.red(error)))
+        .catch(error => console.error(`Tray Error: ${chalk.red(error)}`))
 }
 
 TrayMenu.prototype.refreshTray = function(win){
