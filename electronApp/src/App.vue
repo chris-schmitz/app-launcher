@@ -40,9 +40,7 @@
         data(){
             return {
                 sharedState: store.state,
-                dragcounter: 0,
-                hideAppOnLaunch: false
-
+                dragcounter: 0
             }
         },
         computed:{
@@ -59,6 +57,14 @@
             },
             notificationMessage(){
                 return this.sharedState.notification.message
+            },
+            hideAppOnLaunch:{
+                get(){
+                    return this.sharedState.hideAppOnLaunch
+                },
+                set(hide){
+                    this.sharedState.hideAppOnLaunch = hide
+                }
             }
         },
         methods:{
@@ -94,7 +100,7 @@
             document.ondragover = document.ondrop = (ev) => {
               ev.preventDefault()
             }
-
+            store.getHideAppOnLaunchState()
             store.loadGroups()
         }
     }

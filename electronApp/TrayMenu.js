@@ -28,16 +28,16 @@ TrayMenu.prototype.setTray = function(){
 
             let menuitems = []
 
-            addOpenAppMenuItem(menuitems)
+            this.addOpenAppMenuItem(menuitems)
             menuitems.push({type: 'separator'})
 
-            addLaunchGroupMenuItems(menuitems, result.records)
+            this.addLaunchGroupMenuItems(menuitems, result.records)
             menuitems.push({type: 'separator'})
 
-            addAboutMenuItem(menuitems)
+            this.addAboutMenuItem(menuitems)
             menuitems.push({type: 'separator'})
 
-            addQuitMenuItem(menuitems)
+            this.addQuitMenuItem(menuitems)
 
             const contextMenu = Menu.buildFromTemplate(menuitems)
             this.tray.setContextMenu(contextMenu)
@@ -51,7 +51,7 @@ TrayMenu.prototype.refreshTray = function(win){
     this.setTray(win)
 }
 
-function addQuitMenuItem(menuitems){
+TrayMenu.prototype.addQuitMenuItem = function(menuitems){
     menuitems.push({
         label: 'Quit AppLauncher',
         click:() => {
@@ -60,7 +60,7 @@ function addQuitMenuItem(menuitems){
     })
 }
 
-function addAboutMenuItem(menuitems){
+TrayMenu.prototype.addAboutMenuItem = function(menuitems){
     menuitems.push({
         label: 'About AppLauncher',
         click(){
@@ -80,7 +80,7 @@ function addAboutMenuItem(menuitems){
     })
 }
 
-function addLaunchGroupMenuItems(menuitems, groups){
+TrayMenu.prototype.addLaunchGroupMenuItems = function(menuitems, groups){
     let groupMenuItems = groups.map(group => {
         return {
             label: `Launch group: ${group.name}`,
@@ -96,7 +96,7 @@ function addLaunchGroupMenuItems(menuitems, groups){
     .forEach(item => menuitems.push(item))
 }
 
-function addOpenAppMenuItem(menuitems){
+TrayMenu.prototype.addOpenAppMenuItem = function(menuitems){
     menuitems.unshift({
         label: 'Open Launcher',
         click:() => {

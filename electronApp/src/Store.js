@@ -7,6 +7,7 @@ let store = {
         groupContainerView: 'groupList',
         selectedGroupId: null,
         dropTargetActive: false,
+        hideAppOnLaunch: false,
         notification: {
             type: 'info',
             message: null
@@ -80,12 +81,21 @@ ipc.on('storageRequest-reply', (event, eventResult) => {
         // so hard coding it here instead of handling it dynamically like we would
         store.setContainerView('groupList')
 
-        debugger
         if(requiresGroupReload(eventResult)){
             store.loadGroups()
         } else if(hasNewGroupsToLoad(eventResult)){
             store.state.groups = eventResult.records
         }
+
+        if(eventResult.requestedAction === StorageActions.GETHIDEAPPONLAUNCHSTATE){
+            if(eventResult.records[0].hasOwnProperty('hide')){
+                store.state.hideAppOnLaunch = eventResult.records[0].hide
+            } else {
+                store.showNotification(`There was an error retreiving some of the settings.`)
+                console.error(`There was an error retreiving the initial hide state. ${eventResult.error}`)
+            }
+        }
+
     } else {
         store.showNotification(`There was an error saving the group: ${eventResult.error}`, 'danger')
     }
