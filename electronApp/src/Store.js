@@ -1,6 +1,6 @@
 const ipc = require('electron').ipcRenderer
 const appConfig = require('../appConfig')
-const {Storage, Record} = require('../../lib/StorageInterface')
+const {Storage, Record, StorageActions} = require('../../lib/StorageInterface')
 
 let store = {
     state:{
@@ -22,7 +22,7 @@ let store = {
         }, 3000)
     },
     loadGroups(){
-        ipc.send('storageRequest', 'getAllGroups')
+        ipc.send('storageRequest', StorageActions.GETALLGROUPS)
     },
     launchGroup(group, callback){
         ipc.send('launchGroup', group.name)
@@ -36,7 +36,7 @@ let store = {
         })
     },
     deleteGroup(group){
-        ipc.send('storageRequest', 'deleteGroup', group)
+        ipc.send('storageRequest', StorageActions.DELETEGROUP, group)
     },
     setContainerView(name){
         this.state.groupContainerView = name
@@ -53,15 +53,18 @@ let store = {
         return new Record(name, launchApps)
     },
     saveGroup(group, callback){
-        ipc.send('storageRequest','upsertGroup', group)
+        ipc.send('storageRequest', StorageActions.UPSERTGROUP, group)
     },
     selectedGroup(){
         let group = this.state.groups.filter(group => group.id === this.state.selectedGroupId)
         if(group.length === 0 ) throw new Error('Unable to select the group.')
         return group[0]
     },
-    ToggleHideAppOnLaunch(hide){
-        ipc.send('storageRequest', 'toggleHideAppOnLaunch', hide)
+    getHideAppOnLaunchState(){
+        ipc.send('storageRequest', StorageActions.GETHIDEAPPONLAUNCHSTATE)
+    },
+    toggleHideAppOnLaunch(hide){
+        ipc.send('storageRequest', StorageActions.TOGGLEHIDEAPPONLAUNCH, hide)
     }
 }
 
@@ -77,12 +80,10 @@ ipc.on('storageRequest-reply', (event, eventResult) => {
         // so hard coding it here instead of handling it dynamically like we would
         store.setContainerView('groupList')
 
-        // oh man yeah this is uuuugly but you know what?!?! I'm leaving it in
-        // because if I work on this anymore right now I'm going to go fucking
-        // batty! Have fun future me!!!!!!!!!!!!!! :'(
-        if(eventResult.requestedAction !== 'getAllGroups' && eventResult.requestedAction !== 'toggleHideAppOnLaunch'){
+        debugger
+        if(requiresGroupReload(eventResult)){
             store.loadGroups()
-        } else if(eventResult.requestedAction !== 'toggleHideAppOnLaunch'){
+        } else if(hasNewGroupsToLoad(eventResult)){
             store.state.groups = eventResult.records
         }
     } else {
@@ -90,6 +91,21 @@ ipc.on('storageRequest-reply', (event, eventResult) => {
     }
 
 })
+
+// consider abstracting to a helper file =================================
+function requiresGroupReload(eventResult){
+    return
+        eventResult.requestedAction !== StorageActions.GETALLGROUPS
+        &&
+        eventResult.requestedAction !== StorageActions.TOGGLEHIDEAPPONLAUNCH
+}
+
+function hasNewGroupsToLoad(eventResult){
+    return eventResult.requestedAction === StorageActions.GETALLGROUPS
+}
+
+// consider abstracting to a helper file =================================
+
 // ===============
 
 ipc.on('groupLaunchedFromTray', (event, launchResult) => {

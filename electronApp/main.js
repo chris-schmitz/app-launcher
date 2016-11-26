@@ -10,7 +10,7 @@ const windowHelper = require('./electronHelpers/Window')
 const chalk = require('chalk')
 
 const settings = require('electron-settings')
-const {Storage} = require('../lib/StorageInterface')
+const {Storage, StorageActions} = require('../lib/StorageInterface')
 
 if(process.env.NODE_ENV !== 'development'){
     require('electron-reload')(__dirname, {
@@ -58,13 +58,15 @@ app.on('ready', () => {
 
     createMainAppWindow()
 
-    Storage.getHideAppOnLaunchState([], queryResult => {
-        console.log(`query result: ${queryResult.records[0]}`)
-        let hide = queryResult.records[0]
-        if(hide){
-            win.hide()
-        }
-    })
+    Storage.handleRequest(StorageActions.GETHIDEAPPONLAUNCHSTATE, [])
+        .then(result => {
+            let {hide} = result.records[0]
+            if(hide){
+                win.hide()
+            }
+        })
+        .catch(error => console.error(error))
+
     createTrayMenu()
 
     // if(process.env.NODE_ENV !== 'production'){
@@ -103,7 +105,7 @@ function sendStorageReply(event, eventResult){
 ipc.on('storageRequest', (event, requestType, payload) => {
     Storage.handleRequest(requestType, payload)
         .then(result => {
-            if(result.requestedAction !== 'getAllGroups'){
+            if(result.requestedAction !== StorageActions.GETALLGROUPS){
                 tray.refreshTray(win)
             }
             sendStorageReply(event, result)

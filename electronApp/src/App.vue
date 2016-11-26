@@ -87,7 +87,7 @@
         },
         watch:{
             hideAppOnLaunch(hide){
-                store.ToggleHideAppOnLaunch(hide)
+                store.toggleHideAppOnLaunch(hide)
             }
         },
         mounted(){
