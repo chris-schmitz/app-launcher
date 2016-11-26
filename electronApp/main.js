@@ -8,6 +8,7 @@ const config = require('../config')
 const TrayMenu = require('./TrayMenu')
 const windowHelper = require('./electronHelpers/Window')
 const chalk = require('chalk')
+const co = require('co')
 
 const settings = require('electron-settings')
 const {Storage, StorageActions} = require('../lib/StorageInterface')
@@ -21,11 +22,12 @@ if(process.env.NODE_ENV !== 'development'){
 
 let win, tray
 
-function createMainAppWindow(){
+function createMainAppWindow(hideWindowOnCreation = false){
     win = windowHelper.newWindow({
         height: appConfig.window.height,
         width: appConfig.window.width,
-        titleBarStyle: 'hidden'
+        titleBarStyle: 'hidden',
+        show: !hideWindowOnCreation
     })
 
 
@@ -55,33 +57,51 @@ function createTrayMenu(){
 
 
 app.on('ready', () => {
+    co(function *(){
+        yield Storage.handleRequest(StorageActions.INITIALIZESTORAGE)
+        let hideResult = yield Storage.handleRequest(StorageActions.GETHIDEAPPONLAUNCHSTATE)
+        let {hide} = hideResult.records[0]
 
-    Storage.handleRequest(StorageActions.INITIALIZESTORAGE)
-        .then(result => {
-            console.log(`rezultz :P ${JSON.stringify(result)}`)
-            createMainAppWindow()
+        createMainAppWindow(hide)
+        createTrayMenu()
 
-            Storage.handleRequest(StorageActions.GETHIDEAPPONLAUNCHSTATE, [])
-                .then(result => {
-                    let {hide} = result.records[0]
-                    if(hide){
-                        win.hide()
-                    }
-                })
-                .catch(result => console.error('init', JSON.stringify(result.error)))
+        // if(process.env.NODE_ENV !== 'production'){
+        //     require('vue-devtool').install()
+        // }
 
-            createTrayMenu()
+    })
+    .catch(error => {
+        console.error(new Error(chalk.red(error)))
+        createMainAppWindow()
+        // show error notification
+    })
 
-            // if(process.env.NODE_ENV !== 'production'){
-            //     require('vue-devtool').install()
-            // }
-
-        })
-        .catch(error => {
-            console.error('init', JSON.stringify(error))
-            createMainAppWindow()
-            // display an error notification
-        })
+    // Storage.handleRequest(StorageActions.INITIALIZESTORAGE)
+    //     .then(result => {
+    //         console.log(`rezultz :P ${JSON.stringify(result)}`)
+    //         createMainAppWindow()
+    //
+    //         Storage.handleRequest(StorageActions.GETHIDEAPPONLAUNCHSTATE, [])
+    //             .then(result => {
+    //                 let {hide} = result.records[0]
+    //                 if(hide){
+    //                     win.hide()
+    //                 }
+    //             })
+    //             .catch(result => console.error('init', JSON.stringify(result.error)))
+    //
+    //         createTrayMenu()
+    //
+    //         // if(process.env.NODE_ENV !== 'production'){
+    //         //     require('vue-devtool').install()
+    //         // }
+    //
+    //     })
+    //     .catch(error => {
+    //         console.error('init', JSON.stringify(error))
+    //         createMainAppWindow()
+    //         // display an error notification
+    //     })
 })
 
 app.on('window-all-closed', () => {
