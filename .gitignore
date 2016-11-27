@@ -4,3 +4,4 @@ dist/
 npm-debug.log
 .tags
 .tags_swap
+app-launcher-darwin-x64/

@@ -13,12 +13,12 @@ const co = require('co')
 const settings = require('electron-settings')
 const {Storage, StorageActions} = require('../lib/StorageInterface')
 
-if(process.env.NODE_ENV !== 'development'){
-    require('electron-reload')(__dirname, {
-      electron: path.join(__dirname, '..' ,'node_modules', '.bin', 'electron'),
-      hardRestMethod: 'exit'
-    })
-}
+// if(process.env.NODE_ENV !== 'development'){
+//     require('electron-reload')(__dirname, {
+//       electron: path.join(__dirname, '..' ,'node_modules', '.bin', 'electron'),
+//       hardRestMethod: 'exit'
+//     })
+// }
 
 let win, tray
 
@@ -27,7 +27,7 @@ function createMainAppWindow(hideWindowOnCreation = false){
         height: appConfig.window.height,
         width: appConfig.window.width,
         titleBarStyle: 'hidden',
-        show: !hideWindowOnCreation
+    show: !hideWindowOnCreation
     })
 
 
