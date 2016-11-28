@@ -1,9 +1,9 @@
 const {Menu, Tray} = require('electron')
 const path = require('path')
-const groupLauncher = require('../lib/GroupLauncher')
-const windowHelper = require('./electronHelpers/Window')
+const groupLauncher = require('../../lib/GroupLauncher')
+const windowHelper = require('./Window')
 const chalk = require('chalk')
-const {Storage, StorageActions} = require('../lib/StorageInterface')
+const {Storage, StorageActions} = require('../../lib/StorageInterface')
 const {app} = require('electron')
 
 
@@ -14,7 +14,7 @@ function TrayMenu(win){
 }
 
 TrayMenu.prototype.newTray = function(){
-    this.tray = new Tray(path.resolve(__dirname, './assets/rocketTemplate.png'))
+    this.tray = new Tray(path.resolve(__dirname, '../assets/rocketTemplate.png'))
 }
 
 TrayMenu.prototype.setTray = function(){
