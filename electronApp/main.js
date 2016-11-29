@@ -6,6 +6,7 @@ const fs = require('fs')
 const path = require('path')
 const config = require('../config')
 const TrayMenu = require('./electronHelpers/TrayMenu')
+const OsMenu = require('./electronHelpers/OSMenu')
 const windowHelper = require('./electronHelpers/Window')
 const chalk = require('chalk')
 const co = require('co')
@@ -20,7 +21,7 @@ if(process.env.NODE_ENV !== 'development'){
     })
 }
 
-let win, tray
+let win, tray, osMenu
 
 function createMainAppWindow(hideWindowOnCreation = false){
     win = windowHelper.newWindow({
@@ -55,15 +56,22 @@ function createTrayMenu(){
     tray.setTray()
 }
 
+function createOsMenu(){
+    osMenu = new OsMenu(win)
+    osMenu.setMenu()
+}
+
 
 app.on('ready', () => {
     co(function *(){
+        app.dock.hide()
         yield Storage.handleRequest(StorageActions.INITIALIZESTORAGE)
         let hideResult = yield Storage.handleRequest(StorageActions.GETHIDEAPPONLAUNCHSTATE)
         let {hide} = hideResult.records[0]
 
         createMainAppWindow(hide)
         createTrayMenu()
+        createOsMenu()
 
         // if(process.env.NODE_ENV !== 'production'){
         //     require('vue-devtool').install()
@@ -111,6 +119,6 @@ ipc.on('storageRequest', (event, requestType, payload) => {
             sendStorageReply(event, result)
         })
         .catch(err => {
-            console.error(new Error(chalk.red(err)))
+            console.error(new Error(chalk.red(`Storage request error: Request: ${requestType}, Error: ${JSON.stringify(err)}`)))
         })
 })

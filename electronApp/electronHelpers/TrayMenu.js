@@ -1,16 +1,16 @@
-const {Menu, Tray} = require('electron')
+const {Menu, Tray, app} = require('electron')
 const path = require('path')
 const groupLauncher = require('../../lib/GroupLauncher')
 const windowHelper = require('./Window')
 const chalk = require('chalk')
 const {Storage, StorageActions} = require('../../lib/StorageInterface')
-const {app} = require('electron')
 
 
 
 // I can't decide if it's a good idea to inject the app as
 function TrayMenu(win){
     this.win = win
+    this.tray = null
 }
 
 TrayMenu.prototype.newTray = function(){
