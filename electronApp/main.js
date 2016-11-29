@@ -7,6 +7,7 @@ const path = require('path')
 const config = require('../config')
 const TrayMenu = require('./electronHelpers/TrayMenu')
 const OsMenu = require('./electronHelpers/OSMenu')
+const DockMenu = require('./electronHelpers/DockIconMenu')
 const windowHelper = require('./electronHelpers/Window')
 const chalk = require('chalk')
 const co = require('co')
@@ -61,6 +62,11 @@ function createOsMenu(){
     osMenu.setMenu()
 }
 
+function createDockIconMenu(){
+    dockMenu = new DockMenu(win)
+    dockMenu.setMenu()
+}
+
 
 app.on('ready', () => {
     co(function *(){
@@ -72,6 +78,7 @@ app.on('ready', () => {
         createMainAppWindow(hide)
         createTrayMenu()
         createOsMenu()
+        createDockIconMenu()
 
         // if(process.env.NODE_ENV !== 'production'){
         //     require('vue-devtool').install()
