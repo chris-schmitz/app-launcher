@@ -64,7 +64,7 @@ function createOsMenu(){
 
 app.on('ready', () => {
     co(function *(){
-        app.dock.hide()
+        // app.dock.hide()
         yield Storage.handleRequest(StorageActions.INITIALIZESTORAGE)
         let hideResult = yield Storage.handleRequest(StorageActions.GETHIDEAPPONLAUNCHSTATE)
         let {hide} = hideResult.records[0]

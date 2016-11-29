@@ -47,7 +47,7 @@ function createAppMenu(win){
         submenu:[
             aboutMenuItem,
             {type: 'separator'},
-            openAppMenuItem(win),
+            openAppMenuItem(win, "Preferences"),
             {type: 'separator'},
             {role: 'hide'},
             {role: 'hideothers'},

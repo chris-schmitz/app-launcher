@@ -4,6 +4,8 @@ const groupLauncher = require('../../lib/GroupLauncher')
 const windowHelper = require('./Window')
 const chalk = require('chalk')
 const {Storage, StorageActions} = require('../../lib/StorageInterface')
+const {aboutMenuItem, quitMenuItem, openAppMenuItem} = require('./SharedMenuItems')
+
 
 
 
@@ -28,16 +30,18 @@ TrayMenu.prototype.setTray = function(){
 
             let menuitems = []
 
-            this.addOpenAppMenuItem(menuitems)
+            menuitems.push(openAppMenuItem(this.win, "Open AppLauncher"))
             menuitems.push({type: 'separator'})
 
             this.addLaunchGroupMenuItems(menuitems, result.records)
             menuitems.push({type: 'separator'})
 
-            this.addAboutMenuItem(menuitems)
+            menuitems.push(aboutMenuItem)
+
             menuitems.push({type: 'separator'})
 
-            this.addQuitMenuItem(menuitems)
+            menuitems.push(quitMenuItem)
+
 
             const contextMenu = Menu.buildFromTemplate(menuitems)
             this.tray.setContextMenu(contextMenu)
@@ -51,34 +55,6 @@ TrayMenu.prototype.refreshTray = function(win){
     this.setTray(win)
 }
 
-TrayMenu.prototype.addQuitMenuItem = function(menuitems){
-    menuitems.push({
-        label: 'Quit AppLauncher',
-        click:() => {
-            app.exit(0)
-        }
-    })
-}
-
-TrayMenu.prototype.addAboutMenuItem = function(menuitems){
-    menuitems.push({
-        label: 'About AppLauncher',
-        click(){
-            let win = windowHelper.newWindow({
-                height: 240,
-                width: 310,
-                // titleBarStyle: 'hidden',
-                resizable: false
-            })
-
-            win.loadURL(`file://${__dirname}/src/about.html`)
-
-            win.on('closed', () => {
-                win = null
-            })
-        }
-    })
-}
 
 TrayMenu.prototype.addLaunchGroupMenuItems = function(menuitems, groups){
     let groupMenuItems = groups.map(group => {
@@ -94,15 +70,6 @@ TrayMenu.prototype.addLaunchGroupMenuItems = function(menuitems, groups){
         }
     })
     .forEach(item => menuitems.push(item))
-}
-
-TrayMenu.prototype.addOpenAppMenuItem = function(menuitems){
-    menuitems.unshift({
-        label: 'Open Launcher',
-        click:() => {
-            this.win.show()
-        }
-    })
 }
 
 module.exports = TrayMenu

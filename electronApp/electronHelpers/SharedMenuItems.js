@@ -12,7 +12,7 @@ let aboutMenuItem = {
             resizable: false
         })
 
-        win.loadURL(`file://${__dirname}/src/about.html`)
+        win.loadURL(`file://${__dirname}/../src/about.html`)
 
         win.on('closed', () => {
             win = null
@@ -27,9 +27,9 @@ let quitMenuItem = {
     }
 }
 
-let openAppMenuItem = (win) => {
+let openAppMenuItem = (win, label) => {
     return {
-        label: 'Preferences',
+        label,
         click:() => {
             win.show()
         }
