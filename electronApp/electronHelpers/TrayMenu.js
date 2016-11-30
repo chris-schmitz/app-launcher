@@ -1,6 +1,5 @@
 const {Menu, Tray, app} = require('electron')
 const path = require('path')
-// const groupLauncher = require('../../lib/GroupLauncher')
 const windowHelper = require('./Window')
 const chalk = require('chalk')
 const co = require('co')
@@ -9,12 +8,12 @@ const {aboutMenuItem, quitMenuItem, openAppMenuItem, launchGroupsMenuItems} = re
 
 
 
-// I can't decide if it's a good idea to inject the app as
 function TrayMenu(win){
     this.win = win
     this.tray = null
 }
 
+// hmm, I don't think this is actually needed.
 TrayMenu.prototype.newTray = function(){
     this.tray = new Tray(path.resolve(__dirname, '../assets/rocketTemplate.png'))
 }
@@ -50,9 +49,9 @@ TrayMenu.prototype.setTray = function(){
 }
 
 
-TrayMenu.prototype.refreshTray = function(win){
+TrayMenu.prototype.refreshTray = function(){
     this.tray.destroy()
-    this.setTray(win)
+    this.setTray()
 }
 
 

@@ -1,5 +1,4 @@
 const {Menu} = require('electron')
-const {Storage, StorageActions} = require('../../lib/StorageInterface')
 const {aboutMenuItem, quitMenuItem, openAppMenuItem} = require('./SharedMenuItems')
 const appConfig = require('../appConfig')
 
@@ -8,20 +7,15 @@ function OsMenu(win){
 }
 
 OsMenu.prototype.setMenu = function(){
-    console.log('setting os menu')
-    // Storage.handleRequest(StorageActions.GETALLGROUPS)
-    //     .then(result => {
+    // Note that we're not launching groups from this menu and, because of this,
+    // we don't need to refresh the menu so there's no need to make a call to storage
+    // or to wrap this all in a generator. Just pull the shared menu items we need.
+    let template = []
 
-            let template = []
+    template.push(createAppMenu(this.win))
 
-            template.push(createAppMenu(this.win))
-
-            const menu = Menu.buildFromTemplate(template)
-            setApplicationMenu(menu)
-        // })
-        // .catch(error => {
-        //     console.error(new Error(error))
-        // })
+    const menu = Menu.buildFromTemplate(template)
+    setApplicationMenu(menu)
 }
 
 function setApplicationMenu(menu){

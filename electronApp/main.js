@@ -22,7 +22,7 @@ if(process.env.NODE_ENV !== 'development'){
     })
 }
 
-let win, tray, osMenu
+let win, tray, osMenu, dockMenu
 
 function createMainAppWindow(hideWindowOnCreation = false){
     win = windowHelper.newWindow({
@@ -86,7 +86,7 @@ app.on('ready', () => {
 
     })
     .catch(error => {
-        console.error(new Error(chalk.red(error)))
+        console.error(error)
         createMainAppWindow()
         // show error notification
     })
@@ -121,11 +121,12 @@ ipc.on('storageRequest', (event, requestType, payload) => {
     Storage.handleRequest(requestType, payload)
         .then(result => {
             if(result.requestedAction !== StorageActions.GETALLGROUPS){
-                tray.refreshTray(win)
+                tray.refreshTray()
+                dockMenu.refreshDockIcon()
             }
             sendStorageReply(event, result)
         })
         .catch(err => {
-            console.error(new Error(chalk.red(`Storage request error: Request: ${requestType}, Error: ${JSON.stringify(err)}`)))
+            console.error(err)
         })
 })

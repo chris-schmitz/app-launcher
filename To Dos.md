@@ -1,6 +1,7 @@
 ##To Dos
 - [ ] Get someone to help you with an app icon and maybe styling
-- [ ] Add regular os and icon menus
+- [ ] Clean up error handling, it's a mess at the moment
+- [x] Add regular os and icon menus
 - [x] Add in app storage initiation
 - [x] Refactor the storage interface so that the requested action names are constants that can be referenced in various placed. I.e. instead of having `getAllGroups` hard coded as strings in the main.js, Store.js, GroupLauncher.js, etc, files, export a keymap of constants that they can use instead and then the strings that are actually used are stored in one spot.
 - [x] Figure out proper way of quitting the app when the user quits instead of just closing the window
