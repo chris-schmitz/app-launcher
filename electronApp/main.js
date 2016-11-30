@@ -23,6 +23,7 @@ if(process.env.NODE_ENV !== 'development'){
 }
 
 let win, tray, osMenu, dockMenu
+let forceQuit = false
 
 function createMainAppWindow(hideWindowOnCreation = false){
     win = windowHelper.newWindow({
@@ -33,6 +34,7 @@ function createMainAppWindow(hideWindowOnCreation = false){
     })
 
 
+
     win.loadURL(`file://${__dirname}/client/index.html`)
 
     if(appConfig.debugMode){
@@ -40,7 +42,7 @@ function createMainAppWindow(hideWindowOnCreation = false){
     }
 
     win.on('close', event => {
-        if(!app.isQuitting){
+        if(!forceQuit){
             event.preventDefault()
             win.hide()
         }
@@ -102,6 +104,10 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
     win.show()
+})
+
+app.on('before-quit', () => {
+    forceQuit = true
 })
 
 // Event bridges

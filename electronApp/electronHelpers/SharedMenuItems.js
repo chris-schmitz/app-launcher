@@ -27,7 +27,7 @@ let aboutMenuItem = {
 let quitMenuItem = {
     label: 'Quit AppLauncher',
     click:() => {
-        app.exit(0)
+        app.quit()
     }
 }
 
