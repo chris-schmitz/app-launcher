@@ -9,8 +9,8 @@ function OsMenu(win){
 
 OsMenu.prototype.setMenu = function(){
     console.log('setting os menu')
-    Storage.handleRequest(StorageActions.GETALLGROUPS)
-        .then(result => {
+    // Storage.handleRequest(StorageActions.GETALLGROUPS)
+    //     .then(result => {
 
             let template = []
 
@@ -18,10 +18,10 @@ OsMenu.prototype.setMenu = function(){
 
             const menu = Menu.buildFromTemplate(template)
             setApplicationMenu(menu)
-        })
-        .catch(error => {
-            console.error(new Error(error))
-        })
+        // })
+        // .catch(error => {
+        //     console.error(new Error(error))
+        // })
 }
 
 function setApplicationMenu(menu){

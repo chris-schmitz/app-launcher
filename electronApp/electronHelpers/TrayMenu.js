@@ -1,10 +1,10 @@
 const {Menu, Tray, app} = require('electron')
 const path = require('path')
-const groupLauncher = require('../../lib/GroupLauncher')
+// const groupLauncher = require('../../lib/GroupLauncher')
 const windowHelper = require('./Window')
 const chalk = require('chalk')
-const {Storage, StorageActions} = require('../../lib/StorageInterface')
-const {aboutMenuItem, quitMenuItem, openAppMenuItem} = require('./SharedMenuItems')
+const co = require('co')
+const {aboutMenuItem, quitMenuItem, openAppMenuItem, launchGroupsMenuItems} = require('./SharedMenuItems')
 
 
 
@@ -20,35 +20,35 @@ TrayMenu.prototype.newTray = function(){
 }
 
 TrayMenu.prototype.setTray = function(){
-    console.log(chalk.blue('Loading groups from tray menu'))
+    let me = this
+    co(function *(){
 
-    Storage.handleRequest(StorageActions.GETALLGROUPS, [])
-        .then(result => {
+        me.newTray()
+        me.tray.setToolTip('Launch applications by group.')
+        let menuitems = []
 
-            this.newTray()
-            this.tray.setToolTip('Launch applications by group')
+        menuitems.push(openAppMenuItem(me.win, "Open AppLauncher"))
+        menuitems.push({type: 'separator'})
 
-            let menuitems = []
+        let launchGroupMenu = yield launchGroupsMenuItems(me.win)
+        menuitems = menuitems.concat(launchGroupMenu)
 
-            menuitems.push(openAppMenuItem(this.win, "Open AppLauncher"))
-            menuitems.push({type: 'separator'})
+        menuitems.push({type: 'separator'})
 
-            this.addLaunchGroupMenuItems(menuitems, result.records)
-            menuitems.push({type: 'separator'})
+        menuitems.push(aboutMenuItem)
 
-            menuitems.push(aboutMenuItem)
+        menuitems.push({type: 'separator'})
 
-            menuitems.push({type: 'separator'})
-
-            menuitems.push(quitMenuItem)
+        menuitems.push(quitMenuItem)
 
 
-            const contextMenu = Menu.buildFromTemplate(menuitems)
-            this.tray.setContextMenu(contextMenu)
+        const contextMenu = Menu.buildFromTemplate(menuitems)
+        me.tray.setContextMenu(contextMenu)
 
-        })
-        .catch(error => console.error(`Tray Error: ${chalk.red(error)}`))
+    })
+    .catch(error => console.error(error))
 }
+
 
 TrayMenu.prototype.refreshTray = function(win){
     this.tray.destroy()
@@ -56,20 +56,5 @@ TrayMenu.prototype.refreshTray = function(win){
 }
 
 
-TrayMenu.prototype.addLaunchGroupMenuItems = function(menuitems, groups){
-    let groupMenuItems = groups.map(group => {
-        return {
-            label: `Launch group: ${group.name}`,
-            click: (menuitem, browserWin, event) => {
-                groupLauncher.launch(group.name, (launchResult) => {
-                    if(!this.win.isDestroyed()){
-                        this.win.webContents.send('groupLaunchedFromTray', launchResult)
-                    }
-                })
-            }
-        }
-    })
-    .forEach(item => menuitems.push(item))
-}
 
 module.exports = TrayMenu
