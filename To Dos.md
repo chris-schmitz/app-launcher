@@ -1,4 +1,5 @@
 ##To Dos
+- [ ] Update the readme and make it perty
 - [ ] Get someone to help you with an app icon and maybe styling
 - [ ] Clean up error handling, it's a mess at the moment
 - [x] Add regular os and icon menus
@@ -6,6 +7,7 @@
 - [x] Refactor the storage interface so that the requested action names are constants that can be referenced in various placed. I.e. instead of having `getAllGroups` hard coded as strings in the main.js, Store.js, GroupLauncher.js, etc, files, export a keymap of constants that they can use instead and then the strings that are actually used are stored in one spot.
 - [x] Figure out proper way of quitting the app when the user quits instead of just closing the window
 - [x] Add the ability to let the user decide if they want to show the window on start
+- [ ] Prevent dupilcate group names
 - [ ] Prevent duplicate apps from being added to the launch group
 - [ ] Pass through each file and pull out any unused dependencies
 - [ ] Reorganize the main process and any other file that seems messy

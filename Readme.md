@@ -2,7 +2,40 @@
 
 > Launch app groups by name.
 
-## Development setup
+![demo](readmeattachments/app-demo.gif)
+
+The App Launcher is a Mac OS app built with [Electron](http://electron.atom.io/) and [Vue.js](https://vuejs.org/). The app allows you to create groups of apps that can be launched by group name. [You can download the app here.]()
+
+## Creating Groups
+
+To add a new group, click the "New Group" button.
+
+![newgroup](readmeattachments/NewGroup.png)
+
+This will take you to the group details screen. From here you can name the group and add apps by either drag and dropping them or by picking them from a drop down selection window.
+
+![addingapps](readmeattachments/addingapps.png)
+![dropdownselector](readmeattachments/dropdownselector.png)
+
+Once you've picked the apps you want to launch for the group, click "Update" to save the group. This will add the new group to your launchable list.
+
+![savedgroup](readmeattachments/savedgroup.png)
+
+Once you've created your groups you can launch them from the tray icon:
+
+![trayicon](readmeattachments/trayicon.png)
+
+Or from the dock icon context menu:
+
+![appiconcontextmenu](readmeattachments/appiconcontextmenu.png)
+
+Once you've configured the groups you can hide the app's window by clicking the "Only show menubar on launch" option and closing the window.
+
+![hideonlaunch](readmeattachments/hideonlaunch.png)
+
+When you close the window the app will sit in the background and wait for you to launch a group from the tray or dock icon.
+
+# Development setup
 
 ### Starting up vue
 
