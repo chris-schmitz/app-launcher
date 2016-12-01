@@ -16,10 +16,10 @@ const settings = require('electron-settings')
 const {Storage, StorageActions} = require('../lib/StorageInterface')
 
 if(process.env.NODE_ENV !== 'development'){
-    require('electron-reload')(__dirname, {
-      electron: path.join(__dirname, '..' ,'node_modules', '.bin', 'electron'),
-      hardRestMethod: 'exit'
-    })
+    // require('electron-reload')(__dirname, {
+    //   electron: path.join(__dirname, '..' ,'node_modules', '.bin', 'electron'),
+    //   hardRestMethod: 'exit'
+    // })
 }
 
 let win, tray, osMenu, dockMenu
