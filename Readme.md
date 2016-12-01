@@ -4,7 +4,7 @@
 
 ![demo](readmeattachments/app-demo.gif)
 
-The App Launcher is a Mac OS app built with [Electron](http://electron.atom.io/) and [Vue.js](https://vuejs.org/). The app allows you to create groups of apps that can be launched by group name. [You can download the app here.]()
+The App Launcher is a Mac OS app built with [Electron](http://electron.atom.io/) and [Vue.js](https://vuejs.org/). The app allows you to create groups of apps that can be launched by group name. [You can download the app here.](https://github.com/chris-schmitz/app-launcher/releases/tag/v0.3-beta).
 
 ## Creating Groups
 
