@@ -11,11 +11,11 @@
   "license": "ISC",
   "private": true,
   "scripts": {
-    "dev": "npm run electron & npm run watch:ui",
+    "dev": "npm run build:ui && npm run electron & npm run watch:ui",
     "electron": "electron --debug .",
     "watch:ui": "cross-env NODE_ENV=development webpack --watch",
     "build:ui": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "package": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icons/background.icns --out=./build"
+    "package": "npm run build:ui && electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icons/background.icns --out=./build"
   },
   "postinstall": "install-app-deps",
   "dependencies": {
