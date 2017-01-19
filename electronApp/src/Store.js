@@ -26,9 +26,11 @@ let store = {
         ipc.send('storageRequest', StorageActions.GETALLGROUPS)
     },
     launchGroup(group, callback){
+        debugger
         ipc.send('launchGroup', group.name)
 
         ipc.on('launchGroup-reply', (event, args) => {
+            debugger
             if(args.success){
                 callback(`Group "${group.name}" has been launched.`)
             } else {

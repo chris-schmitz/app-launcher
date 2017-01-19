@@ -4,7 +4,7 @@
         v-on:dragenter="makeDropTargetActive(true)"
         v-on:dragleave="makeDropTargetActive(false)"
     >
-        <h1>App Launcher</h1>
+        <h1>NOICE!</h1>
         <!--
         Note that we need to control the display state of the notification here in the parent context not because
         it won't work if we encapsulate it in the notification component, but because if we do it blows up vue devtools

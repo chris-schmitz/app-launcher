@@ -15,12 +15,12 @@ const co = require('co')
 const settings = require('electron-settings')
 const {Storage, StorageActions} = require('../lib/StorageInterface')
 
-if(process.env.NODE_ENV !== 'development'){
-    // require('electron-reload')(__dirname, {
-    //   electron: path.join(__dirname, '..' ,'node_modules', '.bin', 'electron'),
-    //   hardRestMethod: 'exit'
-    // })
-}
+// if(process.env.NODE_ENV !== 'development'){
+//     require('electron-reload')(__dirname, {
+//       electron: path.join(__dirname, '..' ,'node_modules', '.bin', 'electron'),
+//       hardRestMethod: 'exit'
+//     })
+// }
 
 let win, tray, osMenu, dockMenu
 let forceQuit = false
@@ -30,7 +30,7 @@ function createMainAppWindow(hideWindowOnCreation = false){
         height: appConfig.window.height,
         width: appConfig.window.width,
         titleBarStyle: 'hidden',
-    show: !hideWindowOnCreation
+        show: !hideWindowOnCreation
     })
 
 
@@ -79,7 +79,7 @@ app.on('ready', () => {
 
         createMainAppWindow(hide)
         createTrayMenu()
-        createOsMenu()
+        // createOsMenu()
         createDockIconMenu()
 
         // if(process.env.NODE_ENV !== 'production'){
@@ -110,20 +110,35 @@ app.on('before-quit', () => {
     forceQuit = true
 })
 
+
+
 // Event bridges
 
-function sendLaunchReply(event, payload = {success: false, message: 'Main process error.'}){
-    event.sender.send('launchGroup-reply', payload)
-}
-
+/*
+ * This is a dedicated channel for the main function of the app; launching a specific group.
+ */
 ipc.on('launchGroup', (event, group) => {
+    function sendLaunchReply(event, payload = {success: false, message: 'Main process error.'}){
+        event.sender.send('launchGroup-reply', payload)
+    }
+
     groupLauncher.launch(group, launchResult => sendLaunchReply(event, launchResult))
 })
 
-function sendStorageReply(event, eventResult){
-    event.sender.send('storageRequest-reply', eventResult)
-}
+
+
+
+/*
+ * All requests to storage happen across this channel.
+ * Really, this channel isn't all that different than the `launchGroup`
+ * channel, but we also need a way to know if the menus should be refreshed.
+ */
 ipc.on('storageRequest', (event, requestType, payload) => {
+
+    function sendStorageReply(event, eventResult){
+        event.sender.send('storageRequest-reply', eventResult)
+    }
+
     Storage.handleRequest(requestType, payload)
         .then(result => {
             if(result.requestedAction !== StorageActions.GETALLGROUPS){
@@ -136,3 +151,4 @@ ipc.on('storageRequest', (event, requestType, payload) => {
             console.error(err)
         })
 })
+

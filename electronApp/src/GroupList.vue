@@ -43,6 +43,7 @@
                 store.setContainerView('groupDetails')
             },
             launchGroup(group){
+                debugger
                 store.launchGroup(group, (result) => {
                     this.notificationMessage = result
                 })
