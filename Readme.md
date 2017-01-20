@@ -51,8 +51,16 @@ I'm using [Vue.js](http://www.vuejs.org) for the interface and I'm using webpack
 npm install
 
 # Development
-# tell webpack to start watching the Vue client and then start up electron 
-npm run dev
+## there's an issue at the moment with how the normal dev script interacts with the cross-env package
+## so you can't use `npm run dev` by itself. Instead, you'll need to launch the `electron` and `watch:ui` 
+## scripts separately. Both electron and watch:ui are continuously running processes so they'll need to be
+## started in seperate terminal windows.
+
+# terminal window 1
+npm run electron
+
+#terminal window 2
+npm run watch:ui
 
 # Packaging
 # build the vue client and then package the electron app

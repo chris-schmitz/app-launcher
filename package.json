@@ -12,7 +12,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run build:ui && npm run electron & npm run watch:ui",
-    "electron": "electron --debug .",
+    "electron": "cross-env NODE_ENV=development electron --debug .",
     "watch:ui": "cross-env NODE_ENV=development webpack --watch",
     "build:ui": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "package": "npm run build:ui && electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icons/background.icns --out=./build"

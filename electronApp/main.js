@@ -117,6 +117,7 @@ app.on('before-quit', () => {
 /*
  * This is a dedicated channel for the main function of the app; launching a specific group.
  */
+console.log('update plz')
 ipc.on('launchGroup', (event, group) => {
     function sendLaunchReply(event, payload = {success: false, message: 'Main process error.'}){
         event.sender.send('launchGroup-reply', payload)

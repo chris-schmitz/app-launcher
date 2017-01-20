@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import store from './Store'
+    let store = require('./Store')
 
     module.exports = {
         data(){

@@ -4,7 +4,7 @@
         v-on:dragenter="makeDropTargetActive(true)"
         v-on:dragleave="makeDropTargetActive(false)"
     >
-        <h1>NOICE!</h1>
+        <h1>App Launcher</h1>
         <!--
         Note that we need to control the display state of the notification here in the parent context not because
         it won't work if we encapsulate it in the notification component, but because if we do it blows up vue devtools
@@ -30,10 +30,10 @@
 </template>
 
 <script>
-    import store from './Store'
-    import GroupList from './GroupList.vue'
-    import GroupDetails from './GroupDetails.vue'
-    import Notifications from './Notifications.vue'
+    let  store = require('./Store')
+    let  GroupList = require('./GroupList.vue')
+    let  GroupDetails = require('./GroupDetails.vue')
+    let  Notifications = require('./Notifications.vue')
 
     module.exports = {
         components:{GroupList, GroupDetails,Notifications},

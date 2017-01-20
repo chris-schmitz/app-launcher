@@ -30,10 +30,10 @@
 </template>
 
 <script>
-    import store from './Store'
-    import AppList from './AppList.vue'
-    import AppAdder from './AppAdder.vue'
-    import Modal from './Modal.vue'
+    let store = require('./Store')
+    let AppList = require('./AppList.vue')
+    let AppAdder = require('./AppAdder.vue')
+    let Modal = require('./Modal.vue')
 
     module.exports = {
         components:{AppList, AppAdder, Modal},
