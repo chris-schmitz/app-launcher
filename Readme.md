@@ -57,10 +57,14 @@ npm install
 ## started in seperate terminal windows.
 
 # terminal window 1
-npm run electron
+npm run watch:ui
 
 #terminal window 2
-npm run watch:ui
+npm run electron
+
+# The commands can be run in either order, but if you run electron first you may end up seeing
+# a blank app window until the watch:ui script finishes. If you do see that, you can try refreshing
+# the app with command+r (remember, the app window is really a browser window).
 
 # Packaging
 # build the vue client and then package the electron app
