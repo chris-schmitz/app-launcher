@@ -6,3 +6,5 @@ npm-debug.log
 .tags_swap
 build/*
 !build/.gitkeep
+build.js
+build.js.map

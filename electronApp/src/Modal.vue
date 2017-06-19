@@ -10,6 +10,7 @@
 </template>
 
 <script>
+    let test = 'worked'
     module.exports = {
         data(){
             return {
